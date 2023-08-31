@@ -1,59 +1,41 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 
 public class Solution {
-	static int target;
-	static int cnt = 0;
-	static int ans=0;
-	static boolean[] visited;
-	static int[] nums;
-
-	static void powerset(int index) {
-		if (index == visited.length) {
-			for (int i = 0; i < visited.length; i++) {
-				if (visited[i]) {
-					cnt += nums[i];
-				}
-			}
-			if (cnt == target) {
-				ans++;
-			}
-			cnt = 0;
-
-			return;
-		}
-
-		visited[index] = true;
-		powerset(index + 1);
-
-		visited[index] = false;
-		powerset(index + 1);
-
-		return;
-	}
-
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-
-		int testCases = scanner.nextInt();
-
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		int testCases = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= testCases; tc++) {
-
-			int n = scanner.nextInt();
-			target = scanner.nextInt();
-			nums = new int[n];
-			visited = new boolean[n];
-
+			st = new StringTokenizer(br.readLine());
+			int n =Integer.parseInt(st.nextToken());
+			int k =Integer.parseInt(st.nextToken());
+			int ans = 0;
+			
+			
+			st = new StringTokenizer(br.readLine());
+			
+			int[] arr = new int[n];
 			for (int i = 0; i < n; i++) {
-				nums[i] = scanner.nextInt();
+				arr[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			powerset(0);
-			System.out.printf("#%d %d\n",tc,ans);
-			ans = 0;
-			
-
+			for (int i = 0; i < (1<<n); i++) {
+				int sum = 0;
+				for (int j = 0; j < n; j++) {
+					if((i & (1<<j))>0) {
+						sum += arr[n-1-j];	
+					}	
+				}
+				if (sum == k) ans++;
+			}
+			System.out.printf("#%d %d\n",tc,ans);	
 		}
-
-		scanner.close();
+		br.close();
 	}
+
 }
