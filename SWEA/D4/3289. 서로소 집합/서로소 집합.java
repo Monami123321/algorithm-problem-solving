@@ -1,4 +1,9 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+
 
 public class Solution {
 	
@@ -10,33 +15,33 @@ public class Solution {
 	}
 	
 	static int findSet(int x) {
-//		if(x == root[x])
-//			return x;
-//		else return findSet(root[x]);
 		if(x != root[x])
 			root[x] = findSet(root[x]);
 		return root[x];
 	}
 	
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		
-		int testCases = scanner.nextInt();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st;
+		int testCases = Integer.parseInt(br.readLine());
 		
 		for (int tc = 1; tc <= testCases; tc++) {
-			int n = scanner.nextInt();
-			int m = scanner.nextInt();
+			st = new StringTokenizer(br.readLine());
+			int n = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
 			
 			root = new int[n+1];
 			for (int i = 1; i < n+1; i++) {
 				root[i] = i;
 				
 			}
-			System.out.printf("#%d ",tc);
+			sb.append("#").append(tc).append(" ");
 			for (int i = 0; i < m; i++) {
-				int method = scanner.nextInt();
-				int a = scanner.nextInt();
-				int b = scanner.nextInt();
+				st = new StringTokenizer(br.readLine());
+				int method = Integer.parseInt(st.nextToken());
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
 				
 				switch (method) {
 				case 0:
@@ -44,8 +49,8 @@ public class Solution {
 					
 					break;
 				case 1:
-					if(findSet(a) == findSet(b)) System.out.print(1);
-					else System.out.print(0);
+					if(findSet(a) == findSet(b)) sb.append(1);
+					else sb.append(0);
 					
 					break;
 				
@@ -60,16 +65,16 @@ public class Solution {
 				
 
 			}
-			System.out.println();
+			sb.append("\n");
 			
 			
 			
 		}
 		
+		System.out.println(sb);
 		
 		
-		
-		scanner.close();
+		br.close();
 	}
 
 }
