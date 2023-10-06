@@ -47,8 +47,8 @@ public class Solution {
 				m--;
 
 				int[][] visited = new int[n][n]; // 미생물 겹치는지 체크
-
-				for (int i = 0; i < list.size(); i++) {
+				int loopSize = list.size();
+				for (int i = 0; i < loopSize; i++) {
 					Virus virus = list.get(i);
 					virus.c += dc[virus.dir];
 					virus.r += dr[virus.dir];
@@ -65,6 +65,11 @@ public class Solution {
 						} // 방향 바꾸고
 
 						virus.size /= 2; // 사이즈 반으로 줄이기
+						if(virus.size==0) {
+							list.remove(virus);
+							loopSize--;
+							i--;
+						}
 
 					}
 				}
@@ -75,7 +80,7 @@ public class Solution {
 							int cnt = 0;
 							int tmpDir = -1;
 							int tmpMax = -1;
-							int loopSize = list.size();
+							loopSize = list.size();
 							for (int l = 0; l < loopSize; l++) {
 								Virus chk = list.get(l);
 								if (chk.r == x && chk.c == y) {
