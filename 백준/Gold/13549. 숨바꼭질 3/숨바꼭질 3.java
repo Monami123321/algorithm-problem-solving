@@ -1,49 +1,33 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+	public static void main(String[] args) throws Exception {
 
-		int n = scanner.nextInt();
-		int k = scanner.nextInt();
-
-		int[] check = new int[200000]; // ?????
-		for (int i = 0; i < check.length; i++) {
-			check[i] = Integer.MAX_VALUE;
-
-		}
-		int len = check.length;
-
-		Queue<int[]> queue = new LinkedList<int[]>();
-		queue.add(new int[] { n, 0 });
-		check[n] = 0;
-
-		while (!queue.isEmpty()) {
-			int[] node = queue.poll();
-			int location = node[0];
-			int time = node[1];
-
-
-			if (location - 1 >= 0 && location - 1 < len && check[location - 1] > time + 1) {
-				queue.add(new int[] { location - 1, time + 1 });
-				check[location - 1] = time + 1;
-			}
-			if (location + 1 >= 0 && location + 1 < len && check[location + 1] > time + 1) {
-				queue.add(new int[] { location + 1, time + 1 });
-				check[location + 1] = time + 1;
-			}
-			if (location * 2 >= 0 && location * 2 < len && check[location * 2] > time) {
-				queue.add(new int[] { location * 2, time });
-				check[location * 2] = time;
-			}
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
+		int range = Math.max(k, n);
+		int[] dp = new int[range+1];
+		for (int i = n - 1, tmp = 1; i >= 0; i--) {
+			dp[i] = tmp++;
 
 		}
 
-		System.out.println(check[k]);
+		for (int i = n + 1; i <= k; i++) {
+			if(i%2 == 0)
+				dp[i] = Math.min(dp[i-1]+1, dp[i/2]);
+			else {
+				dp[i] = Math.min(dp[i-1]+1, dp[(i-1)/2]+1);				
+				dp[i] = Math.min(dp[i], dp[(i+1)/2]+1);
+			}
 
-		scanner.close();
+			
+		}
+		
+		System.out.println(dp[k]);
+		br.close();
 	}
-
 }
