@@ -1,6 +1,8 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 	static class Node {
@@ -23,16 +25,19 @@ public class Main {
 	static int w, h;
 	static int ans;
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int testCases = scanner.nextInt();
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		int testCases = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= testCases; tc++) {
-			w = scanner.nextInt();
-			h = scanner.nextInt();
+			st = new StringTokenizer(br.readLine());
+			w = Integer.parseInt(st.nextToken());
+			h = Integer.parseInt(st.nextToken());
 
 			map = new char[h][w];
 			for (int i = 0; i < h; i++) {
-				map[i] = scanner.next().toCharArray();
+				map[i] = br.readLine().toCharArray();
 
 			}
 			ans = 0;
@@ -60,6 +65,9 @@ public class Main {
 			outer: while (!qPerson.isEmpty()) {
 
 				while (!qFire.isEmpty() && qFire.peek().depth == t) {
+					if(qPerson.isEmpty()) {
+						break outer;
+					}
 					Node fire = qFire.poll();
 					int r = fire.r;
 					int c = fire.c;
@@ -113,15 +121,17 @@ public class Main {
 			}
 
 			if (flag) {
-				System.out.println(ans + 1);
+				sb.append(ans + 1).append("\n");
 
 			} else {
-				System.out.println("IMPOSSIBLE");
+				sb.append("IMPOSSIBLE").append("\n");
+
 			}
 
 		}
+		System.out.print(sb);
 
-		scanner.close();
+		br.close();
 	}
 
 }
