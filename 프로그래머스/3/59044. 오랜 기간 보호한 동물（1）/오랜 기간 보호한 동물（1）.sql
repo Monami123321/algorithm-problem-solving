@@ -1,0 +1,9 @@
+-- 코드를 입력하세요
+-- SELECT i.NAME, date_format(i.DATETIME,"%Y-%m-%d %h:%m:%s") DATETIME
+SELECT i.NAME, i.DATETIME
+FROM ANIMAL_INS i
+LEFT OUTER JOIN ANIMAL_OUTS o
+ON i.ANIMAL_ID = o.ANIMAL_ID
+WHERE o.ANIMAL_ID is null
+order by i.DATETIME
+LIMIT 3
