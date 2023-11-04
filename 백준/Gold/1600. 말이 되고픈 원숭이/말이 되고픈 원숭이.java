@@ -20,7 +20,6 @@ public class Main {
 
 		int[][] map = new int[h][w];
 		int[][][] accMap = new int[k + 1][h][w];
-		int[][] jumpVisited = new int[h][w]; // 몇번 점프했는지 기억하는 판
 		boolean[][][] visited = new boolean[k + 1][h][w]; // 걸어간거 다시 못가게만 체크
 
 		for (int i = 0; i < h; i++) {
@@ -56,13 +55,9 @@ public class Main {
 				if (nr < 0 || nr > h - 1 || nc < 0 || nc > w - 1 || map[nr][nc] == 1 || visited[jump][nr][nc]) {
 					continue;
 				}
-//				if (accMap[nr][nc] <= accMap[r][c] + 1 && jumpVisited[nr][nc] <= jump) {
-//					continue;
-//				}
 				queue.add(new int[] { nr, nc, jump });
 				visited[jump][nr][nc] = true;
 				accMap[jump][nr][nc] = Math.min(accMap[jump][nr][nc], accMap[jump][r][c] + 1);
-				jumpVisited[nr][nc] = Math.min(jumpVisited[nr][nc], jump);
 
 			}
 
@@ -76,14 +71,10 @@ public class Main {
 				if (nr < 0 || nr > h - 1 || nc < 0 || nc > w - 1 || map[nr][nc] == 1 || visited[jump + 1][nr][nc]) {
 					continue;
 				}
-//				if (accMap[nr][nc] <= accMap[r][c] + 1 && jumpVisited[nr][nc] <= jump + 1) {
-//					continue;
-//				}
 
 				queue.add(new int[] { nr, nc, jump + 1 });
 				visited[jump + 1][nr][nc] = true;
 				accMap[jump + 1][nr][nc] = Math.min(accMap[jump + 1][nr][nc], accMap[jump][r][c] + 1);
-				jumpVisited[nr][nc] = Math.min(jumpVisited[nr][nc], jump + 1);
 
 			}
 
