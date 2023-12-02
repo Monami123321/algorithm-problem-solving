@@ -3,64 +3,57 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
+
+    static int[] parent;
+
+    static int findSet(int x) {
+        if (parent[x] != x) {
+            return parent[x] = findSet(parent[x]);
+        }
+        return x;
+
+
+    }
+
+    static void union(int x, int y) {
+        parent[findSet(y)] = findSet(x);
+
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int targetNum = Integer.parseInt(br.readLine());
-
-        int[][] dist = new int[n + 1][n + 1];
-
+        int m = Integer.parseInt(br.readLine());
         StringTokenizer st;
+        parent = new int[n + 1];
+        for (int i = 1; i < n + 1; i++) {
+            parent[i] = i;
+        }
 
-        int INF = 1 << 29;
+
         for (int i = 1; i < n + 1; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j < n + 1; j++) {
-                int a = Integer.parseInt(st.nextToken());
-                if (a == 0) {
-                    dist[i][j] = INF;
-                } else {
-                    dist[i][j] = a;
+                int tmp = Integer.parseInt(st.nextToken());
+                if (tmp == 1) {
+                    union(i, j);
                 }
-
-
             }
-            dist[i][i] = 0;
-
         }
         st = new StringTokenizer(br.readLine());
-        int[] target = new int[targetNum];
-        for (int i = 0; i < targetNum; i++) {
+        int[] target = new int[m];
+        for (int i = 0; i < m; i++) {
             target[i] = Integer.parseInt(st.nextToken());
-
         }
-
-        for (int m = 1; m < n + 1; m++) {
-            for (int s = 1; s < n + 1; s++) {
-                for (int e = 1; e < n + 1; e++) {
-                    if (dist[s][e] > dist[s][m] + dist[m][e]) {
-                        dist[s][e] = dist[s][m] + dist[m][e];
-                    }
-                }
+        int check = findSet(target[0]);
+        for (int i = 1; i < m; i++) {
+            if (findSet(target[i]) != check) {
+                System.out.println("NO");
+                return;
             }
 
         }
-
-        boolean flag = true;
-        for (int i = 0; i < target.length - 1; i++) {
-            if (dist[target[i]][target[i + 1]] == INF) {
-                flag = false;
-                break;
-            }
-
-        }
-
-        if (flag) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
-
+        System.out.println("YES");
 
     }
 }
