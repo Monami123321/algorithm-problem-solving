@@ -1,42 +1,51 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int n = scanner.nextInt();
-		int c = scanner.nextInt();
-		int[] arr = new int[n];
-		for (int i = 0; i < n; i++) {
-			arr[i] = scanner.nextInt();
+        int N = Integer.parseInt(st.nextToken());
+        int C = Integer.parseInt(st.nextToken());
 
-		}
-		Arrays.sort(arr);
+        int[] arr = new int[N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
 
-		int start = 1;
-		int end = arr[n - 1] - arr[0];
+        Arrays.sort(arr);
+        int end = arr[N - 1] - arr[0];
+        int start = 0;
 
-		while (start <= end) {
-			int mid = (start + end) / 2;
-			int index = 0;
-			int sum = 1;
-			for (int i = 1; i < arr.length; i++) {
-				if (arr[i] - arr[index] >= mid) {
-					index = i;
-					sum++;
-				}
 
-			}
-			
-			if(sum>=c) start = mid+1;
-			else end = mid-1;
+        while (start<=end) {
+            int mid = (start + end) / 2;
+            int cnt = 1;
+            int prev = 0;
 
-		}
-		System.out.println(end);
-		
+            for (int i = 1; i < N; i++) {
+                if (arr[i] - arr[prev] >= mid) {
+                    cnt++;
+                    prev = i;
+                }
 
-		scanner.close();
-	}
+            }
+
+            if (cnt >= C) {
+                start = mid + 1;
+            } else if (cnt < C) {
+                end = mid - 1;
+            }
+
+
+        }
+
+        System.out.println(end);
+
+
+    }
 
 }
