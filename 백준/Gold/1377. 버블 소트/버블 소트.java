@@ -15,8 +15,8 @@ public class Main {
             count[i] += count[i-1];
         }
         int ans = 0;
-        for (int i = 0; i < n; i++) {
-            int tmp = i - (count[arr[i]]-1);
+        for (int i = n-1; i >=0; i--) {
+            int tmp = i - --count[arr[i]];
             ans = Math.max(ans,tmp);
         }
         System.out.println(ans+1);
