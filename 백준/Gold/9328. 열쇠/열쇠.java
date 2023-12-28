@@ -14,6 +14,13 @@ public class Main {
     static HashMap<Character, ArrayList<int[]>> hashMap;
 
     static void bfs(int startR, int startC) {
+        if (visited[startR][startC] || map[startR][startC] == '*'){
+            return;
+        }
+        if ('A' <= map[startR][startC] && map[startR][startC] < 'a') {
+            return;
+        }
+
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{startR, startC});
         visited[startR][startC] = true;
@@ -117,40 +124,11 @@ public class Main {
 
             visited = new boolean[h][w];
             for (int i = 0; i < h; i++) {
-                if (map[i][0] == '*' || visited[i][0]) {
-                    continue;
-                }
-                if (map[i][0] >= 'A' && map[i][0] < 'a') {
-                    continue;
-                }
                 bfs(i, 0);
-            }
-            for (int i = 0; i < h; i++) {
-                if (map[i][w - 1] == '*' || visited[i][w - 1]) {
-                    continue;
-                }
-                if (map[i][w - 1] >= 'A' && map[i][w - 1] < 'a') {
-                    continue;
-                }
                 bfs(i, w - 1);
             }
             for (int i = 0; i < w; i++) {
-                if (map[0][i] == '*' || visited[0][i]) {
-                    continue;
-                }
-                if (map[0][i] >= 'A' && map[0][i] < 'a') {
-                    continue;
-                }
                 bfs(0, i);
-            }
-
-            for (int i = 0; i < w; i++) {
-                if (map[h - 1][i] == '*' || visited[h - 1][i]) {
-                    continue;
-                }
-                if (map[h - 1][i] >= 'A' && map[h - 1][i] < 'a') {
-                    continue;
-                }
                 bfs(h - 1, i);
             }
 
