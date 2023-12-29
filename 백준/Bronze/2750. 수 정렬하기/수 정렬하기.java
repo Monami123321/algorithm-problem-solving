@@ -1,30 +1,29 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int n = Integer.parseInt(br.readLine());
         int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int tmp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = tmp;
+                }
+            }
+        }
 
-        int max = 0;
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt()+1000;
-            max = Math.max(arr[i], max);
+            sb.append(arr[i]).append("\n");
         }
-        int[] count = new int[max+1];
-        for (int i = 0; i < n; i++) {
-            count[arr[i]]++;
-        }
-        for (int i = 1; i < max+1; i++) {
-            count[i] += count[i - 1];
-        }
-        int[] sortedArr = new int[n];
-        for (int i = n-1; i >= 0; i--) {
-            sortedArr[--count[arr[i]]] = arr[i]-1000;
-        }
-        for (int i = 0; i < n; i++) {
-            System.out.println(sortedArr[i]);
-        }
-        sc.close();
+        System.out.print(sb);
+        br.close();
     }
 }
