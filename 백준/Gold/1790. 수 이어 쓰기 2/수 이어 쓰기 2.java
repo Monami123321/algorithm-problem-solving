@@ -4,44 +4,34 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
-        int n = Integer.parseInt(st.nextToken());
-        long k = Long.parseLong(st.nextToken());
-
-        int cnt = 1; // 몇 자리수
-        long num = 9; // 개수는?
-
-        while (k - cnt * num >= 0) {
-            k -= cnt * num;
-            cnt++;
-            num *= 10;
-
+        int N = Integer.parseInt(st.nextToken());
+        long k = Integer.parseInt(st.nextToken());
+        int idx = 0;
+        while (k >= 0) {
+            long tmp = (long) Math.pow(10, idx++);
+            if (k - 9 * tmp * idx >= 0) {
+                k -= 9 * tmp * idx;
+            } else break;
         }
-
-        int start = (int) Math.pow(10, cnt - 1);
-
         if (k == 0) {
-            if (start - 1 > n) {
+            if (N < (long) Math.pow(10, idx - 1) - 1) {
                 System.out.println(-1);
                 return;
+            } else {
+                String tmp = String.valueOf((long) Math.pow(10, idx - 1) - 1);
+                System.out.println(tmp.charAt(tmp.length() - 1));
+                return;
             }
-            String tmp = String.valueOf(start - 1);
-            System.out.println(tmp.charAt(tmp.length() - 1));
-            return;
         }
-        k--;
-        start += (k / cnt);
-        if (start > n) {
-            System.out.println(-1);
-            return;
+        long target = (long) Math.pow(10, idx - 1) + (k - 1) / (idx);
+        if (target > N) System.out.println(-1);
+        else {
+            int numIdx = (int) (k - 1) % (idx);
+            System.out.println(String.valueOf(target).charAt(numIdx));
         }
-        int index = (int)k % cnt;
-        System.out.println(String.valueOf(start).charAt(index));
-
-
-        br.close();
     }
 }
