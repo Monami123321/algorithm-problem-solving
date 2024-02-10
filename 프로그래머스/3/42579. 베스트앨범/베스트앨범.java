@@ -33,19 +33,5 @@ class Solution {
         });
         
         return ansList.stream().mapToInt(e -> e.intValue()).toArray();
-        
-        
-        
-            
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 }
