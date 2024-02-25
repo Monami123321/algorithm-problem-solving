@@ -25,7 +25,7 @@ public class Main {
             int end = Integer.parseInt(st.nextToken());
 
             Queue<Node> queue = new LinkedList<>();
-            boolean[] visited = new boolean[20000];
+            boolean[] visited = new boolean[10000];
             visited[start] = true;
             queue.add(new Node(start));
             while (!queue.isEmpty()) {
@@ -40,7 +40,7 @@ public class Main {
                 int[] delta = {(getNum(now.data) << 1) % 10000, getNum(now.data) == 0 ? 9999 : getNum(now.data) - 1,
                         left(getNum(now.data)), right(getNum(now.data))};
                 for (int i = 0; i < 4; i++) {
-                    if (delta[i] < 0 || delta[i] >= 20000 || visited[delta[i]]) {
+                    if (delta[i] < 0 || delta[i] >= 10000 || visited[delta[i]]) {
                         continue;
                     }
                     Node next = new Node(delta[i]);
