@@ -13,17 +13,17 @@ public class Main {
             arr[i] = Integer.parseInt(br.readLine());
         }
         Arrays.sort(arr);
-        int[] targetArr = new int[n * n];
+        int[] targetArr = new int[n * (n - 1) / 2 + n];
         int index = 0;
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+            for (int j = i; j < n; j++) {
                 targetArr[index++] = arr[i] + arr[j];
             }
         }
         Arrays.sort(targetArr);
 
-        for (int i = n-1; i >= 0; i--) {
-            for (int j = i-1; j >= 0; j--) {
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i - 1; j >= 0; j--) {
                 if (binarySearch(targetArr, arr[i] - arr[j])) {
                     System.out.println(arr[i]);
                     return;
@@ -32,6 +32,7 @@ public class Main {
         }
         br.close();
     }
+
     static boolean binarySearch(int[] arr, int target) {
         int start = 0;
         int end = arr.length - 1;
