@@ -36,6 +36,9 @@ public class Main {
             if (visited[now[0]]) {
                 continue;
             }
+            if (now[1] > k) {
+                break;
+            }
             visited[now[0]] = true;
             pick++;
             if (now[1] == k) {
