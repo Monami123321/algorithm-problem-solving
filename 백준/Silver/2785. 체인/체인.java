@@ -22,16 +22,16 @@ public class Main {
             if (i == index) {
                 break;
             }
-            int now =
-                    arr[i];
+            int now = arr[i];
             while (now > 0) {
                 now--;
                 index--;
-                ans++;
                 if (index == i) {
+                    ans += arr[i] - now;
                     break outer;
                 }
             }
+            ans += arr[i];
         }
         System.out.println(ans);
 
