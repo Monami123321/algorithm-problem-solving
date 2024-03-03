@@ -27,11 +27,12 @@ public class Main {
             adjList[b].add(a);
         }
         flag = false;
+        boolean[] visited = new boolean[N];
         for (int i = 0; i < N; i++) {
             if (flag) {
                 break;
             }
-            dfs(i, new boolean[N], 1);
+            dfs(i, visited, 1);
         }
         if (flag) {
             System.out.println(1);
@@ -50,12 +51,13 @@ public class Main {
             return;
         }
         visited[node] = true;
-        adjList[node].forEach(e -> {
-            if (visited[e]) {
-                return;
+        for (int n : adjList[node]) {
+            if (visited[n]) {
+                continue;
             }
-            dfs(e, visited, cnt + 1);
-        });
+            dfs(n, visited, cnt + 1);
+        }
+        
         visited[node] = false;
     }
 }
