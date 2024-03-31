@@ -24,7 +24,7 @@ public class Main {
                 index++;
             } else {
                 cnt++;
-                now = arr[index] + l - 1;
+                now = arr[index++] + l - 1;
             }
         }
         System.out.println(cnt);
