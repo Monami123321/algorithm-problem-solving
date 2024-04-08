@@ -31,21 +31,36 @@ public class Main {
         int endR = Integer.parseInt(st.nextToken()) - 1;
         int endC = Integer.parseInt(st.nextToken()) - 1;
 
-        list.forEach(e -> {
-            int r = Math.max(e[0] - (h - 1), 0);
-            int c = Math.max(e[1] - (w - 1), 0);
+//        list.forEach(e -> {
+//            int r = Math.max(e[0] - (h - 1), 0);
+//            int c = Math.max(e[1] - (w - 1), 0);
+//            map[r][c]++;
+//            if (e[0] < n - 1) {
+//                map[e[0] + 1][c]--;
+//            }
+//            if (e[1] < m - 1) {
+//                map[r][e[1] + 1]--;
+//            }
+//            if (e[0] < n - 1 && e[1] < m - 1) {
+//                map[e[0] + 1][e[1] + 1]++;
+//            }
+//            map[e[0]][e[1]]--;
+//        });
+        for (int[] arr : list) {
+            int r = Math.max(arr[0] - (h - 1), 0);
+            int c = Math.max(arr[1] - (w - 1), 0);
             map[r][c]++;
-            if (e[0] < n - 1) {
-                map[e[0] + 1][c]--;
+            if (arr[0] < n - 1) {
+                map[arr[0] + 1][c]--;
             }
-            if (e[1] < m - 1) {
-                map[r][e[1] + 1]--;
+            if (arr[1] < m - 1) {
+                map[r][arr[1] + 1]--;
             }
-            if (e[0] < n - 1 && e[1] < m - 1) {
-                map[e[0] + 1][e[1] + 1]++;
+            if (arr[0] < n - 1 && arr[1] < m - 1) {
+                map[arr[0] + 1][arr[1] + 1]++;
             }
-            map[e[0]][e[1]]--;
-        });
+            map[arr[0]][arr[1]]--;
+        }
         if (h > 1) {
             map[n - (h - 1)][0]++;
         }
