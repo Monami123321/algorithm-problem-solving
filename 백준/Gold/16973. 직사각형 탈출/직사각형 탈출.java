@@ -46,7 +46,24 @@ public class Main {
 //            }
 //            map[e[0]][e[1]]--;
 //        });
-        for (int[] arr : list) {
+//        for (int[] arr : list) {
+//            int r = Math.max(arr[0] - (h - 1), 0);
+//            int c = Math.max(arr[1] - (w - 1), 0);
+//            map[r][c]++;
+//            if (arr[0] < n - 1) {
+//                map[arr[0] + 1][c]--;
+//            }
+//            if (arr[1] < m - 1) {
+//                map[r][arr[1] + 1]--;
+//            }
+//            if (arr[0] < n - 1 && arr[1] < m - 1) {
+//                map[arr[0] + 1][arr[1] + 1]++;
+//            }
+//            map[arr[0]][arr[1]]--;
+//        }
+        int size = list.size();
+        for (int i = 0; i < size; ++i) {
+            int[] arr = list.get(i);
             int r = Math.max(arr[0] - (h - 1), 0);
             int c = Math.max(arr[1] - (w - 1), 0);
             map[r][c]++;
@@ -61,6 +78,7 @@ public class Main {
             }
             map[arr[0]][arr[1]]--;
         }
+        
         if (h > 1) {
             map[n - (h - 1)][0]++;
         }
