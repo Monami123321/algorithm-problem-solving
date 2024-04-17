@@ -11,15 +11,19 @@ public class Main {
 		int m = Integer.parseInt(st.nextToken());
 		int ans = 0;
 		int VAL = (3 << m) + 3;
+		int[][] check = new int[n - 1][m - 1];
+		for (int i = 0; i < n - 1; i++) {
+			for (int j = 0; j < m - 1; j++) {
+				check[i][j] = VAL << (i * m + j);
+			}
+		}
 		
 		outer:for (int i = 0; i < 1 << m * n; i++) {
 			for (int j = 0; j < n-1; j++) {
 				for (int k = 0; k < m - 1; k++) {
-					int now = VAL << (j * m + k);
-					if ((i & now) == now) {
+					if ((i & check[j][k]) == check[j][k]) {
 						continue outer;
 					}
-
 				}
 			}
 			ans++;
