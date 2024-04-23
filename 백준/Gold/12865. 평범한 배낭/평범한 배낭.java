@@ -9,19 +9,18 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
-        int[] dp = new int[k+1];
+
+        int[] arr = new int[k + 1];
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int w = Integer.parseInt(st.nextToken());
-            if (w > k) {
-                continue;
-            }
             int v = Integer.parseInt(st.nextToken());
             for (int j = k; j >= w; j--) {
-                dp[j] = Math.max(dp[j], dp[j - w] + v);
+                arr[j] = Math.max(arr[j - w] + v, arr[j]);
             }
         }
-        System.out.println(dp[k]);
+        System.out.println(arr[k]);
+
         br.close();
     }
 }
