@@ -1,93 +1,79 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        final long ref = 1_000_000_007;
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
-        int treeSize = 0;
-        int treeStartIndex = 0;
-        for (int i = 20; i >= 0; i--) {
-            if ((n & (1 << i)) != 0) {
-                if (n == (1 << i)) {
-                    treeSize = 1 << (i + 1);
-                    treeStartIndex = 1 << i;
-                    break;
-                } else {
-                    treeSize = 1 << (i + 2);
-                    treeStartIndex = 1 << (i + 1);
-                    break;
-                }
-            }
-        }
-        long[] segTree = new long[treeSize];
-        for (int i = 1; i < segTree.length; i++) {
-            segTree[i] = 1;
-        } // 구간곱계산위해서 1로 초기화
-        for (int i = 0; i < n; i++) {
-            segTree[treeStartIndex + i] = Long.parseLong(br.readLine());
-        } // 데이터 입력
+	static final int MOD = 1_000_000_007;
 
-        for (int i = segTree.length - 1; i >= 1; i--) {
-            segTree[i] %= ref;
-            segTree[i >> 1] *= segTree[i];
-        } // 구간곱 끝
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int q = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < m + k; i++) {
-            st = new StringTokenizer(br.readLine());
-            int cmd = Integer.parseInt(st.nextToken());
-            if (cmd == 1) {
-                int oldIndex = Integer.parseInt(st.nextToken()) - 1 + treeStartIndex;
-                long newVal = Long.parseLong(st.nextToken());
+		int startIndex = 1;
+		while (startIndex < n) {
+			startIndex <<= 1;
+		}
+		int treeSize = startIndex << 1;
+		long[] segTree = new long[treeSize];
+		Arrays.fill(segTree, 1);
+		for (int i = 0; i < n; i++) {
+			segTree[startIndex + i] = Integer.parseInt(br.readLine());
+		}
+		for (int i = treeSize - 1; i > 1; i--) {
+			segTree[i >> 1] *= segTree[i];
+			segTree[i >> 1] %= MOD;
+		}
 
-                segTree[oldIndex] = newVal;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < m + q; i++) {
+			st = new StringTokenizer(br.readLine());
+			int cmd = Integer.parseInt(st.nextToken());
+			if (cmd == 1) {
+				int index = Integer.parseInt(st.nextToken()) - 1 + startIndex;
+				// long next = Long.parseLong(st.nextToken());
+				segTree[index] = Long.parseLong(st.nextToken());
+				while (index > 1) {
+					segTree[index >> 1] = (segTree[index] * segTree[index ^ 1]) % MOD;
+					index >>= 1;
+				}
+			} else {
+				int start = Integer.parseInt(st.nextToken()) - 1 + startIndex;
+				int end = Integer.parseInt(st.nextToken()) - 1 + startIndex;
+				sb.append(getProduct(segTree, start, end)).append("\n");
+			}
+		}
+		System.out.print(sb);
+		br.close();
+	}
 
-                while (oldIndex > 1) {
-                    if ((oldIndex & 1) == 0) {
-                        newVal = (segTree[oldIndex] * segTree[oldIndex + 1]) % ref;
+	static long getProduct(long[] segTree, int start, int end) {
+		long res = 1;
+		while (end > start) {
+			if ((start & 1) == 0) {
+				start >>= 1;
+			} else {
+				res *= segTree[start++];
+				start >>= 1;
+				res %= MOD;
+			}
 
-                    } else {
-                        newVal = (segTree[oldIndex] * segTree[oldIndex - 1]) % ref;
-                    }
-                    oldIndex >>= 1;
-                    segTree[oldIndex] = newVal;
-                }
-
-            } else {
-                int start = Integer.parseInt(st.nextToken()) - 1 + treeStartIndex;
-                int end = Integer.parseInt(st.nextToken()) - 1 + treeStartIndex;
-
-                long product = 1;
-
-                while (end >= start) {
-                    if ((start & 1) == 1) {
-                        product *= segTree[start];
-                        product %= ref;
-                        start = (start + 1) >> 1;
-                    } else {
-                        start = (start + 1) >> 1;
-                    }
-                    if ((end & 1) == 0) {
-                        product *= segTree[end];
-                        product %= ref;
-                        end = (end - 1) >> 1;
-                    } else {
-                        end = (end - 1) >> 1;
-                    }
-                }
-                sb.append(product).append("\n");
-            }
-
-        }
-        System.out.print(sb);
-
-        br.close();
-    }
+			if ((end & 1) == 0) {
+				res *= segTree[end--];
+				end >>= 1;
+				res %= MOD;
+			} else {
+				end >>= 1;
+			}
+		}
+		if (start == end) {
+			res *= segTree[start];
+			res %= MOD;
+		}
+		return res;
+	}
 }
