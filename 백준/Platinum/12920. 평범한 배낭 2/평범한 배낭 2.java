@@ -9,37 +9,30 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-
-        int[] dp = new int[m + 1];
-        for (int good = 0; good < n; good++) {
+        int[] arr = new int[m + 1];
+        for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int w = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
             int k = Integer.parseInt(st.nextToken());
 
-            int tmp = 0;
-            while (k >= (1 << tmp)) {
-                k -= (1 << tmp++);
-            }
-            int weight = w;
-            int cost = c;
-            for (int i = 0; i < tmp; i++) {
-                weight = w * (1 << i);
-                cost = c * (1 << i);
+            int now = 1;
+            while (k > now) {
+                int weight = w * now;
+                int value = v * now;
                 for (int j = m; j >= weight; j--) {
-                    dp[j] = Math.max(dp[j], dp[j - weight] + cost);
+                    arr[j] = Math.max(arr[j], arr[j - weight] + value);
                 }
+                k -= now;
+                now <<= 1;
             }
-            if (k != 0) {
-                w *= k;
-                c *= k;
-                for (int i = m; i >= w; i--) {
-                    dp[i] = Math.max(dp[i], dp[i - w] + c);
-                }
+            w *= k;
+            v *= k;
+            for (int j = m; j >= w; j--) {
+                arr[j] = Math.max(arr[j], arr[j - w] + v);
             }
-
         }
-        System.out.println(dp[m]);
+        System.out.println(arr[m]);
         br.close();
     }
 }
