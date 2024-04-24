@@ -4,74 +4,59 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		StringBuilder sb = new StringBuilder();
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
 
-		int V = Integer.parseInt(st.nextToken());
-		int E = Integer.parseInt(st.nextToken());
 		int start = Integer.parseInt(br.readLine());
-
-		List<int[]>[] adjList= new ArrayList[V+1];
-		for (int i = 1; i < adjList.length; i++) {
+		List<int[]>[] adjList = new ArrayList[n + 1];
+		for (int i = 1; i < n + 1; i++) {
 			adjList[i] = new ArrayList<>();
-			
 		}
-		for (int i = 0; i < E; i++) {
+		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int w = Integer.parseInt(st.nextToken());
-			adjList[a].add(new int[] {b,w});
-			
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
+			adjList[s].add(new int[] {e, cost});
 		}
-		int[] minEdge = new int[V + 1];
-		Arrays.fill(minEdge, Integer.MAX_VALUE);
-		minEdge[start] = 0;
-
-		boolean[] visited = new boolean[V + 1];
-
+		int[] dist = new int[n + 1];
+		boolean[] visited = new boolean[n + 1];
+		Arrays.fill(dist, Integer.MAX_VALUE);
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+		pq.add(new int[] {start, 0});
 		int pick = 0;
-		while (pick < V) {
-			int min = Integer.MAX_VALUE;
-			int index = -1;
-
-			for (int i = 1; i < minEdge.length; i++) {
-				if(visited[i]) continue;
-				if (min > minEdge[i]) {
-					min = minEdge[i];
-					index = i;
+		while (!pq.isEmpty()) {
+			int[] now = pq.poll();
+			if (visited[now[0]]) {
+				continue;
+			}
+			visited[now[0]] = true;
+			dist[now[0]] = now[1];
+			adjList[now[0]].forEach(e -> {
+				if (visited[e[0]]) {
+					return;
 				}
-			}
-			if(index == -1) break;
-			visited[index] = true;
-			pick++;
-
-			for (int i = 0; i < adjList[index].size(); i++) {
-				if (visited[adjList[index].get(i)[0]])
-					continue;
-				minEdge[adjList[index].get(i)[0]] = Math.min(minEdge[adjList[index].get(i)[0]], minEdge[index] + adjList[index].get(i)[1]);
-
-			}
-
+				pq.add(new int[] {e[0], e[1] + now[1]});
+			});
 		}
-//		System.out.println(Arrays.toString(minEdge));
-		
-		for (int i = 1; i < V+1; i++) {
-			if (minEdge[i] != Integer.MAX_VALUE)
-				sb.append(minEdge[i]).append("\n");
-			else
+		StringBuilder sb = new StringBuilder();
+		for (int i = 1; i < n+1; i++) {
+			if (dist[i] == Integer.MAX_VALUE) {
 				sb.append("INF\n");
-			
+			} else {
+				sb.append(dist[i]).append("\n");
+			}
 		}
-		System.out.println(sb);
 
+		System.out.print(sb);
 		br.close();
-
 	}
-
 }
+
