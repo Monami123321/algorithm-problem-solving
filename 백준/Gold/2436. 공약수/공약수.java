@@ -13,7 +13,8 @@ public class Main {
 		for (int i = (int)Math.sqrt(target); i >= 1; --i) {
 			if (target % i == 0) {
 				int tmp = (int)(target / i);
-				if (getGCD(tmp, i) == GCD && getLCM(tmp, i) == LCM) {
+				int gcd = getGCD(tmp, i);
+				if (gcd == GCD && (long)i * tmp / gcd == LCM) {
 					System.out.printf("%d %d", i, tmp);
 					return;
 				}
@@ -28,8 +29,5 @@ public class Main {
 			b = tmp;
 		}
 		return a;
-	}
-	static long getLCM(int a, int b) {
-		return (long)a * b / getGCD(a, b);
 	}
 }
