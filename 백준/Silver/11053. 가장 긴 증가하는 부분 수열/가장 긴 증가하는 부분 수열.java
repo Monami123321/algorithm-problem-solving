@@ -10,24 +10,52 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         int[] arr = new int[n];
-
+        int max = 0;
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
+            max = Math.max(arr[i], max);
         }
-        int[] dp = new int[n];
-        Arrays.fill(dp, 1);
-        int ans = 1;
+        int startIndex = 1;
+        while (startIndex < max) {
+            startIndex <<= 1;
+        }
+        int treeSize = startIndex << 1;
+        int[] segTree = new int[treeSize];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (arr[j] < arr[i]) {
-                    dp[i] = Math.max(dp[j] + 1, dp[i]);
-                }
-            }
-            ans = Math.max(ans, dp[i]);
+            int prev = query(segTree, startIndex, startIndex + arr[i] - 2);
+            update(segTree, startIndex + arr[i] - 1, prev + 1);
         }
-        System.out.println(ans);
-
-
+        System.out.println(segTree[1]);
         br.close();
     }
+
+    static int query(int[] segTree, int left, int right) {
+        int res = 0;
+        while (right > left) {
+            if ((left & 1) == 0) {
+                left >>= 1;
+            } else {
+                res = Math.max(res, segTree[left++]);
+                left >>= 1;
+            }
+            if ((right & 1) == 0) {
+                res = Math.max(res, segTree[right--]);
+                right >>= 1;
+            } else {
+                right >>= 1;
+            }
+        }
+        if (left == right) {
+            res = Math.max(segTree[left], res);
+        }
+        return res;
+    }
+
+    static void update(int[] segTree, int index, int val) {
+        while (index > 0) {
+            segTree[index] = Math.max(segTree[index], val);
+            index >>= 1;
+        }
+    }
+
 }
