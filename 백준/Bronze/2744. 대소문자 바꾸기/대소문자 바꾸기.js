@@ -1,0 +1,1 @@
+console.log(require('fs').readFileSync(0).toString().trim().split("").map(e=> String.fromCharCode(e.charCodeAt(0) ^ 32)).join(""));
