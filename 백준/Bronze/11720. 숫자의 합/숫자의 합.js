@@ -1,0 +1,1 @@
+console.log(require('fs').readFileSync(0).toString().trim().split("\n").pop().split("").reduce((total, now) => total + +now ,0));
