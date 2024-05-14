@@ -1,0 +1,1 @@
+console.log(Math.ceil(+require('fs').readFileSync(0).toString() / 5));
