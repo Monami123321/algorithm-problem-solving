@@ -1,0 +1,1 @@
+console.log("a".repeat(+require('fs').readFileSync(0)));
