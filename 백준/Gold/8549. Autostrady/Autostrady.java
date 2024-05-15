@@ -26,45 +26,22 @@ public class Main {
             edges[i][1] = b;
             edges[i][2] = c;
         }
+        for (int i = 1; i < n+1; i++) {
+            parent[i] = i;
+        }
         Arrays.sort(edges, Comparator.comparingInt(a -> a[2]));
-        int start = 0;
-        int end = m - 1;
-        while (end >= start) {
-            int mid = (start + end) >> 1;
-
-            for (int i = 1; i < n + 1; i++) {
-                parent[i] = i;
-            }
-
-            if (isPossible(mid, n)) {
-                end = mid - 1;
-            } else {
-                start = mid + 1;
-            }
-        }
-        System.out.println(edges[start][2]);
-        br.close();
-    }
-
-    static boolean isPossible(int index, int n) {
-        if (index + 1 < n - 1) {
-            return false;
-        }
-        union(edges[index][0], edges[index][1]);
-        int pick = 1;
-        int now = 0;
-        while (now < index && pick < n - 1) {
-            if (pick + index - now < n - 1) {
-                return false;
-            }
-            if (union(edges[now][0], edges[now][1])) {
-                now++;
+        int index = 0;
+        int pick = 0;
+        while (pick < n - 1) {
+            if (union(edges[index][0], edges[index][1])) {
                 pick++;
+                index++;
             } else {
-                now++;
+                index++;
             }
         }
-        return pick == n - 1;
+        System.out.println(edges[index-1][2]);
+        br.close();
     }
 
     static boolean union(int a, int b) {
