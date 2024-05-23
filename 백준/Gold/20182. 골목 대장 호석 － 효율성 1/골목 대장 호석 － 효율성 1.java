@@ -3,10 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -36,6 +34,7 @@ public class Main {
 			adjList[a].add(new int[] {b, c});
 			adjList[b].add(new int[] {a, c});
 		}
+		int ref = max;
 
 		while (min <= max) {
 			int mid = (min + max) >> 1;
@@ -45,9 +44,10 @@ public class Main {
 				min = mid + 1;
 			}
 		}
-		System.out.println(min == 21 ? -1 : min);
+		System.out.println(min == ref + 1 ? -1 : min);
 		br.close();
 	}
+
 	static boolean dijkstra(int target) {
 		boolean[] visited = new boolean[N + 1];
 		PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
