@@ -1,1 +1,1 @@
-console.log("SciComLove".repeat(+require('fs').readFileSync(0)));
+console.log("SciComLove\n".repeat(+require('fs').readFileSync(0)));
