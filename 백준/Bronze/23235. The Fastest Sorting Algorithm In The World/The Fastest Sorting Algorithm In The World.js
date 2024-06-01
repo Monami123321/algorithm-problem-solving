@@ -1,0 +1,1 @@
+console.log(require('fs').readFileSync(0).toString().trim().split("\n").slice(1).map((e,index)=> `Case ${index+1}: Sorting... done!`).join("\n"));
