@@ -1,0 +1,1 @@
+console.log(+require('fs').readFileSync(0) % 7 === 2 ? 1 : 0)
