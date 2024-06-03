@@ -1,0 +1,1 @@
+console.log(Math.pow(+require('fs').readFileSync(0),3));
