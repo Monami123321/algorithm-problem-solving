@@ -6,43 +6,44 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int[] arr = new int[n];
-		int[] tmp = new int[n];
-		int[] lis = new int[n];
-		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-			tmp[i] = Integer.MAX_VALUE;
-		}
-		int size = 0;
-		for (int i = 0; i < n; i++) {
-			int index = Arrays.binarySearch(tmp, arr[i]);
-			if (index < 0) {
-				index = -(index + 1);
-			}
-			tmp[index] = arr[i];
-			lis[i] = index;
-			if (size < index + 1) {
-				size = index + 1;
-			}
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(size).append("\n");
-		Stack<Integer> stack = new Stack<>();
-		size--;
-		for (int i = n - 1; i >= 0; i--) {
-			if (lis[i] == size) {
-				stack.push(arr[i]);
-				size--;
-			}
-		}
-		while (!stack.isEmpty()) {
-			sb.append(stack.pop()).append(" ");
-		}
-		System.out.print(sb);
-		br.close();
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        int[] arr = new int[n];
+        int[] tmp = new int[n];
+        int[] lis = new int[n];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+            tmp[i] = Integer.MAX_VALUE;
+        }
+        int maxIndex = 0;
+        for (int i = 0; i < n; i++) {
+            int index = Arrays.binarySearch(tmp, arr[i]);
+            if (index < 0) {
+                index = -(index + 1);
+            }
+            tmp[index] = arr[i];
+            maxIndex = Math.max(maxIndex, index);
+            lis[i] = index;
+        }
+        Stack<Integer> stack = new Stack<>();
+        int index = n - 1;
+        while (maxIndex >= 0) {
+            if (lis[index] == maxIndex) {
+                stack.push(arr[index]);
+                --maxIndex;
+            }
+            --index;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(stack.size()).append("\n");
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop()).append(" ");
+        }
+        System.out.print(sb);
+
+
+        br.close();
+    }
 }
