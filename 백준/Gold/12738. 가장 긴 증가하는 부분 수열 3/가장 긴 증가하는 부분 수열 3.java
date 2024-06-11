@@ -9,17 +9,19 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         int[] arr = new int[n];
-        StringTokenizer st = new StringTokenizer(br.readLine());
         int[] lis = new int[n];
-        Arrays.fill(lis, Integer.MAX_VALUE);
-        int ans = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
+            lis[i] = Integer.MAX_VALUE;
+        }
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
             int index = Arrays.binarySearch(lis, arr[i]);
             if (index < 0) {
                 index = -(index + 1);
-                lis[index] = arr[i];
             }
+            lis[index] = arr[i];
             ans = Math.max(ans, index + 1);
         }
         System.out.println(ans);
