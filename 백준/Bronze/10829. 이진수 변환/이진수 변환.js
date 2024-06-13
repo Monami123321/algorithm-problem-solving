@@ -1,0 +1,1 @@
+console.log(BigInt(require('fs').readFileSync(0).toString()).toString(2));
