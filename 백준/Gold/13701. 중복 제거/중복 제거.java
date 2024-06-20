@@ -1,19 +1,24 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedHashSet;
+import java.util.BitSet;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(br.readLine());
-        LinkedHashSet<Integer> set = new LinkedHashSet<>();
+        BitSet bitSet = new BitSet(1 << 25);
         while (st.hasMoreTokens()) {
-            set.add(Integer.parseInt(st.nextToken()));
+            int now = Integer.parseInt(st.nextToken());
+            if (bitSet.get(now)) {
+                continue;
+            }
+            sb.append(now).append(" ");
+            bitSet.set(now);
         }
-        System.out.print(set.stream().map(String::valueOf).collect(Collectors.joining(" ")));
+        System.out.print(sb);
         br.close();
     }
 }
