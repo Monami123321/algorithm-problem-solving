@@ -12,43 +12,44 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
-        mergeSort(arr);
+        quickSort(arr);
         System.out.print(Arrays.stream(arr).mapToObj(String::valueOf).collect(Collectors.joining("\n")));
         br.close();
     }
 
-    static void mergeSort(int[] arr) {
-        int[] tmp = new int[arr.length];
-        mergeSort(arr, tmp, 0, arr.length - 1);
+    static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
     }
 
-    static void mergeSort(int[] arr, int[] tmp, int left, int right) {
-        if (left == right) {
-            return;
+    static void quickSort(int[] arr, int start, int end) {
+        int pivot = partition(arr, start, end);
+        if (start < pivot - 1) {
+            quickSort(arr, start, pivot - 1);
         }
-        int mid = left + right >> 1;
-        mergeSort(arr, tmp, left, mid);
-        mergeSort(arr, tmp, mid + 1, right);
-        merge(arr, tmp, left, mid, right);
+        if (pivot < end) {
+            quickSort(arr, pivot, end);
+        }
     }
 
-    static void merge(int[] arr, int[] tmp, int left, int mid, int right) {
-        int index = left;
-        int l = left;
-        int r = mid + 1;
-        while (l <= mid && r <= right) {
-            if (arr[l] < arr[r]) {
-                tmp[index++] = arr[l++];
-            } else {
-                tmp[index++] = arr[r++];
+    static int partition(int[] arr, int start, int end) {
+        int val = arr[start + end >> 1];
+        while (start <= end) {
+            while (arr[start] < val) {
+                ++start;
+            }
+            while (arr[end] > val) {
+                --end;
+            }
+            if (start <= end) {
+                swap(arr, start++, end--);
             }
         }
-        while (l <= mid) {
-            tmp[index++] = arr[l++];
-        }
-        while (r <= right) {
-            tmp[index++] = arr[r++];
-        }
-        System.arraycopy(tmp, left, arr, left, right - left + 1);
+        return start;
+    }
+
+    static void swap(int[] arr, int a, int b) {
+        int tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
     }
 }
