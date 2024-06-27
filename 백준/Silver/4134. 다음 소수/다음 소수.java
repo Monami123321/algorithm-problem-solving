@@ -9,8 +9,11 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         while (tc-- > 0) {
             long n = Long.parseLong(br.readLine());
-            if (n < 2 ) {
+            if (n < 3) {
                 sb.append(2).append("\n");
+                continue;
+            } else if (n == 3) {
+                sb.append(3).append("\n");
                 continue;
             }
             while (true) {
@@ -27,9 +30,12 @@ public class Main {
     }
 
     static boolean isPrime(long n) {
+        if ((n & 1) == 0 || n % 3 == 0) {
+            return false;
+        }
         int limit = (int) Math.sqrt(n);
-        for (int i = 2; i <= limit; i++) {
-            if (n % i == 0) {
+        for (int i = 5; i <= limit; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
                 return false;
             }
         }
