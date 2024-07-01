@@ -1,0 +1,1 @@
+console.log(require('fs').readFileSync(0).toString().trim().split(" ").map(e => BigInt(`0b${e}`)).reduce((total, now) => total + now).toString(2));
