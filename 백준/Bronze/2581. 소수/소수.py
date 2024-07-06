@@ -5,9 +5,9 @@ def is_prime(n):
         return True
     if (n & 1) == 0 or n % 3 == 0:
         return False
-    limit = int(n ** 0.5) + 1
-    for i in range(5, limit, 6):
-        if n % i == 0 or n % (i + 2) == 0:
+    limit = int(n ** 0.5) + 3
+    for i in range(6, limit, 6):
+        if n % (i - 1) == 0 or n % (i + 1) == 0:
             return False
         
     return True
