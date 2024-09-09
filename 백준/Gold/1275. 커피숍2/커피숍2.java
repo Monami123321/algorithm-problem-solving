@@ -4,72 +4,78 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int q = Integer.parseInt(st.nextToken());
+    static long[] segTree;
 
-		int startIndex = 1;
-		while (startIndex < n) {
-			startIndex <<= 1;
-		}
-		int treeSize = startIndex << 1;
-		long[] segTree = new long[treeSize];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < n; i++) {
-			segTree[startIndex + i] = Long.parseLong(st.nextToken());
-		}
-		for (int i = treeSize - 1; i > 1; i--) {
-			segTree[i >> 1] += segTree[i];
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < q; i++) {
-			st = new StringTokenizer(br.readLine());
-			int left = Integer.parseInt(st.nextToken()) + startIndex -1;
-			int right = Integer.parseInt(st.nextToken()) + startIndex - 1;
-			if (left > right) {
-				int tmp = left;
-				left = right;
-				right = tmp;
-			}
-			int index = Integer.parseInt(st.nextToken()) + startIndex - 1;
-			long val = Long.parseLong(st.nextToken());
-			sb.append(query(segTree, left, right)).append("\n");
-			update(segTree, index, val);
-		}
-		System.out.print(sb);
-		br.close();
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int q = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        segTree = new long[n << 2];
+        init(arr, 1, 0, n - 1);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q; i++) {
+            st = new StringTokenizer(br.readLine());
+            int left = Integer.parseInt(st.nextToken()) - 1;
+            int right = Integer.parseInt(st.nextToken()) - 1;
+            if (left > right) {
+                left ^= right;
+                right ^= left;
+                left ^= right;
+                
+            }
+            int index = Integer.parseInt(st.nextToken()) - 1;
+            int val = Integer.parseInt(st.nextToken());
 
-	static void update(long[] segTree, int index, long val) {
-		long diff = val - segTree[index];
-		while (index > 0) {
-			segTree[index] += diff;
-			index >>= 1;
-		}
-	}
+            sb.append(query(1, 0, n - 1, left, right)).append("\n");
+            update(1, index, val, 0, n - 1);
+        }
+        System.out.print(sb);
 
-	static long query(long[] segTree, int left, int right) {
-		long res = 0;
-		while (right >= left) {
-			if ((left & 1) == 0) {
-				left >>= 1;
-			} else {
-				res += segTree[left++];
-				left >>= 1;
-			}
 
-			if ((right & 1) == 0) {
-				res += segTree[right--];
-				right >>= 1;
-			} else {
-				right >>= 1;
-			}
-		}
-		if (left == right) {
-			res += segTree[left];
-		}
-		return res;
-	}
+        br.close();
+    }
+
+    static long init(int[] arr, int node, int nodeLeft, int nodeRight) {
+        if (nodeLeft == nodeRight) {
+            return segTree[node] = arr[nodeLeft];
+        }
+        int mid = nodeLeft + nodeRight >> 1;
+        long leftVal = init(arr, node << 1, nodeLeft, mid);
+        long rightVal = init(arr, node << 1 | 1, mid + 1, nodeRight);
+        return segTree[node] = leftVal + rightVal;
+    }
+
+    static long query(int node, int nodeLeft, int nodeRight, int left, int right) {
+        if (nodeRight < left || nodeLeft > right) {
+            return 0;
+        }
+        if (left <= nodeLeft && nodeRight <= right) {
+            return segTree[node];
+        }
+        int mid = nodeLeft + nodeRight >> 1;
+        long leftVal = query(node << 1, nodeLeft, mid, left, right);
+        long rightVal = query(node << 1 | 1, mid + 1, nodeRight, left, right);
+        return leftVal + rightVal;
+    }
+
+    static long update(int node, int index, int val, int nodeLeft, int nodeRight) {
+        if (index < nodeLeft || index > nodeRight) {
+            return segTree[node];
+        }
+        if (nodeLeft == nodeRight) {
+            return segTree[node] = val;
+        }
+        int mid = nodeLeft + nodeRight >> 1;
+        long leftVal = update(node << 1, index, val, nodeLeft, mid);
+        long rightVal = update(node << 1 | 1, index, val, mid + 1, nodeRight);
+        return segTree[node] = leftVal + rightVal;
+    }
+
 }
+
