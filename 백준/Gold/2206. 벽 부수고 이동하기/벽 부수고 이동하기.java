@@ -1,87 +1,72 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int[] dr = { -1, 1, 0, 0 };
-	static int[] dc = { 0, 0, -1, 1 };
+    static int[] dr = {-1, 1, 0, 0};
+    static int[] dc = {0, 0, -1, 1};
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
+        char[][] map = new char[n][m];
+        for (int i = 0; i < n; i++) {
+            map[i] = br.readLine().toCharArray();
+        }
 
-		int[][] map = new int[n][m];
-		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine(), "01", true);
-			for (int j = 0; j < m; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
+        int[][][] visited = new int[2][n][m];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < n; j++) {
+                Arrays.fill(visited[i][j], Integer.MAX_VALUE);
+            }
+        }
 
-			}
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{0, 0, 1, 0});
+        visited[0][0][0] = 1;
 
-		}
+        while (!queue.isEmpty()) {
+            int[] now = queue.poll();
+            int r = now[0];
+            int c = now[1];
+            int t = now[2];
+            int b = now[3];
 
-		int[][] accMap = new int[n][m];
-		int[][] visited = new int[n][m]; // accMap에 최소값이 적힐 때 벽 뚫었는지 0 1
-		boolean[][] visited2 = new boolean[n][m];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				accMap[i][j] = Integer.MAX_VALUE;
+            for (int i = 0; i < 4; i++) {
+                int nr = r + dr[i];
+                int nc = c + dc[i];
 
-			}
+                if (nr < 0 || nr > n - 1 || nc < 0 || nc > m - 1) {
+                    continue;
+                }
 
-		}
-		accMap[0][0] = 1;
+                if (map[nr][nc] == 49 && b == 1) {
+                    continue;
+                }
 
-		Queue<int[]> queue = new LinkedList<>();
-
-		queue.offer(new int[] { 0, 0, 1, 0 });
-
-		while (!queue.isEmpty()) {
-			int[] now = queue.poll();
-			int r = now[0];
-			int c = now[1];
-			int cost = now[2];
-			int wall = now[3];
-
-			for (int i = 0; i < 4; i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
-
-				if (nr < 0 || nr > n - 1 || nc < 0 || nc > m - 1) {
-					continue;
-				}
-				if ((accMap[nr][nc] <= cost + 1 && visited[nr][nc] <= wall + map[nr][nc]) || wall + map[nr][nc] >= 2) {
-					continue;
-				}
-
-				if (cost + 1 <= accMap[nr][nc]) {
-					queue.add(new int[] { nr, nc, cost + 1, wall + map[nr][nc] });
-					visited[nr][nc] = wall + map[nr][nc];
-					accMap[nr][nc] = cost + 1;
-
-				} else {
-					if (visited2[nr][nc] == true) {
-						continue;
-					}
-					queue.add(new int[] { nr, nc, cost + 1, wall + map[nr][nc] });
-					visited2[nr][nc] = true;
-				}
-
-			}
-
-		}
-		if (accMap[n - 1][m - 1] == Integer.MAX_VALUE) {
-			System.out.println(-1);
-		} else {
-			System.out.println(accMap[n - 1][m - 1]);
-		}
-
-		br.close();
-	}
-
+                if (map[nr][nc] == 48) {
+                    if (visited[b][nr][nc] > t + 1) {
+                        queue.add(new int[]{nr, nc, t + 1, b});
+                        visited[b][nr][nc] = t + 1;
+                    }
+                } else {
+                    if (visited[b + 1][nr][nc] > t + 1) {
+                        queue.add(new int[]{nr, nc, t + 1, b + 1});
+                        visited[b + 1][nr][nc] = t + 1;
+                    }
+                }
+            }
+        }
+        int ans = Math.min(visited[0][n - 1][m - 1], visited[1][n - 1][m - 1]);
+        ans = ans == Integer.MAX_VALUE ? -1 : ans;
+        System.out.print(ans);
+        br.close();
+    }
 }
