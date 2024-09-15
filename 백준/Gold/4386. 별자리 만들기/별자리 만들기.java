@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -29,29 +29,27 @@ public class Main {
             arr[i][0] = Double.parseDouble(st.nextToken());
             arr[i][1] = Double.parseDouble(st.nextToken());
         }
-        Edge[] edges = new Edge[n * (n - 1) >> 1];
+        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingDouble(a -> a.dist));
         int index = 0;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 double x = arr[i][0] - arr[j][0];
                 double y = arr[i][1] - arr[j][1];
-                edges[index++] = new Edge(i, j, Math.sqrt(x * x + y * y));
+                pq.add(new Edge(i, j, Math.sqrt(x * x + y * y)));
             }
         }
-        Arrays.sort(edges, Comparator.comparingDouble(a -> a.dist));
         parent = new int[n];
         for (int i = 1; i < n; i++) {
             parent[i] = i;
         }
         double cost = 0;
-        index = 0;
         int cnt = 0;
         while (cnt < n - 1) {
-            if (union(edges[index].from, edges[index].to)) {
-                cost += edges[index].dist;
+            Edge edge = pq.poll();
+            if (union(edge.from, edge.to)) {
+                cost += edge.dist;
                 cnt++;
             }
-            index++;
         }
         System.out.println(cost);
 
