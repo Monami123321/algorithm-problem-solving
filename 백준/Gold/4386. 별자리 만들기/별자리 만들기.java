@@ -6,7 +6,8 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static class Edge {
+    static class Edge implements Comparable<Edge> {
+
         int from, to;
         double dist;
 
@@ -14,6 +15,11 @@ public class Main {
             this.from = from;
             this.to = to;
             this.dist = dist;
+        }
+
+        @Override
+        public int compareTo(Edge edge) {
+            return Double.compare(this.dist, edge.dist);
         }
     }
 
@@ -29,8 +35,7 @@ public class Main {
             arr[i][0] = Double.parseDouble(st.nextToken());
             arr[i][1] = Double.parseDouble(st.nextToken());
         }
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingDouble(a -> a.dist));
-        int index = 0;
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 double x = arr[i][0] - arr[j][0];
