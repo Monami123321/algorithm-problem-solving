@@ -34,12 +34,12 @@ public class Main {
                 }
             }
         }
-        perm(0, new int[11], redR, redC, blueR, blueC);
+        perm(0, new boolean[N][M][N][M], redR, redC, blueR, blueC);
         System.out.println(flag);
         br.close();
     }
 
-    static void perm(int depth, int[] prev, int rr, int rc, int br, int bc) {
+    static void perm(int depth, boolean[][][][] visited, int rr, int rc, int br, int bc) {
         if (depth == 11 || flag != 0) {
             return;
         }
@@ -50,23 +50,18 @@ public class Main {
         }
 
         for (int i = 0; i < 4; i++) {
-            if (depth > 0 && prev[depth - 1] == i) {
-                continue;
-            }
-            if (depth > 3 && prev[depth - 2] == i && prev[depth - 3] == prev[depth - 1] && (prev[depth - 1] ^ 1) == i) {
-                continue;
-            }
-
-            int[] nextRed = getNextCoord(rr, rc, i);
             int[] nextBlue = getNextCoord(br, bc, i);
-            int nrr = nextRed[0];
-            int nrc = nextRed[1];
             int nbr = nextBlue[0];
             int nbc = nextBlue[1];
 
             if (nbr == goalR && nbc == goalC) {
                 continue;
             }
+
+            int[] nextRed = getNextCoord(rr, rc, i);
+            int nrr = nextRed[0];
+            int nrc = nextRed[1];
+
 
             if (nrr == nbr && nrc == nbc) {
                 if (nextRed[2] > nextBlue[2]) {
@@ -77,8 +72,12 @@ public class Main {
                     nbc -= dc[i];
                 }
             }
-            prev[depth] = i;
-            perm(depth + 1, prev, nrr, nrc, nbr, nbc);
+            if (visited[nrr][nrc][nbr][nbc]) {
+                continue;
+            }
+            visited[nrr][nrc][nbr][nbc] = true;
+            perm(depth + 1, visited, nrr, nrc, nbr, nbc);
+            visited[nrr][nrc][nbr][nbc] = false;
         }
 
     }
@@ -107,6 +106,4 @@ public class Main {
         }
         return res;
     }
-
-
 }
