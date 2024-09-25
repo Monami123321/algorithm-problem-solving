@@ -27,8 +27,6 @@ public class Main {
 
         int startR = Integer.parseInt(st.nextToken()) - 1;
         int startC = Integer.parseInt(st.nextToken()) - 1;
-        int goalR = Integer.parseInt(st.nextToken()) - 1;
-        int goalC = Integer.parseInt(st.nextToken()) - 1;
         list.add(new Pos(startR, startC));
 
 
@@ -38,14 +36,14 @@ public class Main {
         }
         map[startR][startC] = '2';
         int cnt = 0;
-        while (!bfs(goalR, goalC, map)) {
+        while (!bfs(map)) {
             cnt++;
         }
         System.out.println(cnt + 1);
         br.close();
     }
 
-    static boolean bfs(int goalR, int goalC, char[][] map) {
+    static boolean bfs(char[][] map) {
         Queue<Pos> queue = new LinkedList<>(list);
         list.clear();
         while (!queue.isEmpty()) {
