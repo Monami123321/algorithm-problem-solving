@@ -12,44 +12,27 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
-        quickSort(arr);
+        coungtingSort(arr);
         System.out.print(Arrays.stream(arr).mapToObj(String::valueOf).collect(Collectors.joining("\n")));
         br.close();
     }
 
-    static void quickSort(int[] arr) {
-        quickSort(arr, 0, arr.length - 1);
-    }
+    static void coungtingSort(int[] arr) {
+        int max = Arrays.stream(arr).max().getAsInt();
 
-    static void quickSort(int[] arr, int start, int end) {
-        int pivot = partition(arr, start, end);
-        if (start < pivot - 1) {
-            quickSort(arr, start, pivot - 1);
-        }
-        if (pivot < end) {
-            quickSort(arr, pivot, end);
-        }
-    }
+        int[] cnt = new int[max + 1000001];
 
-    static int partition(int[] arr, int start, int end) {
-        int val = arr[start + end >> 1];
-        while (start <= end) {
-            while (arr[start] < val) {
-                ++start;
-            }
-            while (arr[end] > val) {
-                --end;
-            }
-            if (start <= end) {
-                swap(arr, start++, end--);
-            }
+        for (int i = 0; i < arr.length; i++) {
+            cnt[arr[i] + 1000000]++;
         }
-        return start;
-    }
+        for (int i = 1; i < cnt.length; i++) {
+            cnt[i] += cnt[i - 1];
+        }
+        int[] sorted = new int[arr.length];
 
-    static void swap(int[] arr, int a, int b) {
-        int tmp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = tmp;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            sorted[--cnt[arr[i] + 1000000]] = arr[i];
+        }
+        System.arraycopy(sorted, 0, arr, 0, arr.length);
     }
 }
