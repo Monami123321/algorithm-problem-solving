@@ -1,38 +1,79 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class Main {
+    static byte[] buffer = new byte[10000000];
+    static int index = 0;
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        System.in.read(buffer);
+        int n = nextInt();
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+            arr[i] = nextInt();
         }
-        coungtingSort(arr);
-        System.out.print(Arrays.stream(arr).mapToObj(String::valueOf).collect(Collectors.joining("\n")));
-        br.close();
+        quickSort(arr);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(arr[i]).append("\n");
+        }
+        System.out.print(sb);
     }
 
-    static void coungtingSort(int[] arr) {
-        int max = Arrays.stream(arr).max().getAsInt();
-
-        int[] cnt = new int[max + 1000001];
-
-        for (int i = 0; i < arr.length; i++) {
-            cnt[arr[i] + 1000000]++;
+    static int nextInt() {
+        int res = buffer[index++];
+        boolean flag = res == '-';
+        if (flag) {
+            res = buffer[index++];
         }
-        for (int i = 1; i < cnt.length; i++) {
-            cnt[i] += cnt[i - 1];
+        res -= 48;
+        int tmp;
+        while (true) {
+            tmp = buffer[index++] - 48;
+            if (tmp < 0 || tmp > 9) {
+                break;
+            }
+            res *= 10;
+            res += tmp;
         }
-        int[] sorted = new int[arr.length];
+        if (flag) {
+            res = ~res + 1;
+        }
+        return res;
+    }
 
-        for (int i = arr.length - 1; i >= 0; i--) {
-            sorted[--cnt[arr[i] + 1000000]] = arr[i];
+    static void quickSort(int[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+    static void quickSort(int[] arr, int start, int end) {
+        int pivot = partition(arr, start, end);
+        if (start + 1 < pivot) {
+            quickSort(arr, start, pivot - 1);
         }
-        System.arraycopy(sorted, 0, arr, 0, arr.length);
+        if (pivot < end) {
+            quickSort(arr, pivot, end);
+        }
+    }
+
+    static int partition(int[] arr, int start, int end) {
+        int val = arr[start + end >> 1];
+        while (start <= end) {
+            while (arr[start] < val) {
+                start++;
+            }
+            while (arr[end] > val) {
+                end--;
+            }
+            if (start <= end) {
+                swap(arr, start++, end--);
+            }
+        }
+        return start;
+    }
+
+    static void swap(int[] arr, int a, int b) {
+        int tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
     }
 }
