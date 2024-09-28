@@ -1,59 +1,80 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Main {
+    static int idx = 0;
+
+    public static void main(String[] args) throws IOException {
+        byte[] buffer = new byte[6000];
+        System.in.read(buffer);
+        int n = nextInt(buffer);
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = nextInt(buffer);
+        }
+        quickSort(arr);
+//        System.out.println(Arrays.stream(arr).mapToObj(String::valueOf).collect(Collectors.joining("\n")));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(arr[i]).append("\n");
+        }
+        System.out.print(sb);
+    }
+
+    static int nextInt(byte[] buffer) {
+        int res = buffer[idx++];
+        int sign = (char) res == '-' ? -1 : 1;
+        if (sign == -1) {
+            res = buffer[idx++];
+        }
+        res -= 48;
+        int tmp;
+        while (true) {
+            tmp = buffer[idx++];
+            if (tmp < '0' || tmp > '9') {
+                break;
+            }
+            res *= 10;
+            res += tmp - 48;
+        }
+        return res * sign;
+    }
+
     static void quickSort(int[] arr) {
-        sort(arr, 0, arr.length - 1);
+        quickSort(arr, 0, arr.length - 1);
     }
 
-    private static void sort(int[] arr, int start, int end) {
+    static void quickSort(int[] arr, int start, int end) {
         int pivot = partition(arr, start, end);
+        if (start + 1 < pivot) {
+            quickSort(arr, start, pivot - 1);
+        }
         if (pivot < end) {
-            sort(arr, pivot, end);
+            quickSort(arr, pivot, end);
         }
-        if (pivot > start + 1) {
-            sort(arr,start,pivot-1);
-        }
-
     }
 
-    private static int partition(int[] arr, int start, int end) {
-        int pivot = arr[(start + end) / 2];
-        while (end >= start) {
-            while (arr[start] < pivot) {
+    static int partition(int[] arr, int start, int end) {
+        int val = arr[start + end >> 1];
+
+        while (start <= end) {
+            while (arr[start] < val) {
                 start++;
             }
-            while (arr[end] > pivot) {
+            while (arr[end] > val) {
                 end--;
             }
-            if (end >= start) {
-                int tmp = arr[start];
-                arr[start] = arr[end];
-                arr[end] = tmp;
-                start++;
-                end--;
+            if (start <= end) {
+                swap(arr, start++, end--);
             }
         }
         return start;
     }
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-
-        quickSort(arr);
-        for (int i = 0; i < n; i++) {
-            sb.append(arr[i]).append("\n");
-
-        }
-        System.out.print(sb);
-
-        br.close();
+    static void swap(int[] arr, int a, int b) {
+        int tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
     }
 }
