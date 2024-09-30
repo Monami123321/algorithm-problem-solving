@@ -17,7 +17,7 @@ public class Main {
         while (index < n) {
             index++;
             sb.append(arr[index - 1]).append("\n");
-            if (index % 1000 == 0) {
+            if (index % 100000 == 0) {
                 System.out.print(sb);
                 sb = new StringBuilder();
             }
