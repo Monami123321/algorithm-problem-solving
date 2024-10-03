@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Random;
 
 public class Main {
     static byte[] buffer = new byte[5000000];
@@ -34,7 +35,7 @@ public class Main {
     }
 
     static int partition(int[] arr, int start, int end) {
-        int val = arr[start + end >> 1];
+        int val = arr[new Random().nextInt(end - start + 1) + start];
         while (start <= end) {
             while (arr[start] < val) {
                 start++;
