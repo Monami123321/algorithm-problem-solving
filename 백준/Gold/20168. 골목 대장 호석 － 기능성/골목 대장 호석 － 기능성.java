@@ -26,18 +26,18 @@ public class Main {
         }
         int ans = -1;
         boolean[] visited = new boolean[n + 1];
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-        pq.add(new int[]{start, 0});
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+        pq.add(new int[]{start, 0, 0});
         while (!pq.isEmpty()) {
             int[] now = pq.poll();
             int node = now[0];
             int c = now[1];
-
+            int mc = now[2];
             if (visited[node] || c > cost) {
                 continue;
             }
             if (node == end) {
-                ans = c;
+                ans = mc;
                 break;
             }
             visited[node] = true;
@@ -45,7 +45,7 @@ public class Main {
                 if (visited[e[0]]) {
                     return;
                 }
-                pq.add(new int[]{e[0], e[1] + c});
+                pq.add(new int[]{e[0], e[1] + c, Math.max(mc, e[1])});
             });
         }
         System.out.println(ans);
