@@ -10,26 +10,30 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         int[] arr = new int[m + 1];
+
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int w = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
-            int k = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
 
-            int now = 1;
-            while (k > now) {
-                int weight = w * now;
-                int value = v * now;
+            int index = 1;
+            while (c >= index) {
+                int weight = w * index;
+                int val = v * index;
                 for (int j = m; j >= weight; j--) {
-                    arr[j] = Math.max(arr[j], arr[j - weight] + value);
+                    arr[j] = Math.max(arr[j - weight] + val, arr[j]);
                 }
-                k -= now;
-                now <<= 1;
+                c -= index;
+                index <<= 1;
             }
-            w *= k;
-            v *= k;
+            if (c == 0) {
+                continue;
+            }
+            w *= c;
+            v *= c;
             for (int j = m; j >= w; j--) {
-                arr[j] = Math.max(arr[j], arr[j - w] + v);
+                arr[j] = Math.max(arr[j - w] + v, arr[j]);
             }
         }
         System.out.println(arr[m]);
