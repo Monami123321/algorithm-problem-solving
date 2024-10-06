@@ -1,0 +1,1 @@
+console.log("LoveisKoreaUniversity ".repeat(+require('fs').readFileSync(0)));
