@@ -13,22 +13,16 @@ public class Main {
             int n = Integer.parseInt(br.readLine());
             int[] arr = new int[n];
             st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < n; i++) {
+            arr[0] = Integer.parseInt(st.nextToken());
+            int globalMax = arr[0];
+            for (int i = 1; i < n; i++) {
                 arr[i] = Integer.parseInt(st.nextToken());
+                arr[i] = Math.max(arr[i - 1] + arr[i], arr[i]);
+                globalMax = Math.max(globalMax, arr[i]);
             }
-            int max = Integer.MIN_VALUE;
-            for (int i = 0; i < n; i++) {
-                int sum = arr[i];
-                max = Math.max(max, sum);
-                for (int j = i + 1; j < n; j++) {
-                    sum += arr[j];
-                    max = Math.max(max, sum);
-                }
-            }
-            sb.append(max).append("\n");
+            sb.append(globalMax).append("\n");
         }
         System.out.print(sb);
         br.close();
     }
 }
-
