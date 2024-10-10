@@ -1,71 +1,57 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-
-
     static int[] parent;
-    
-    static int findSet(int x) {
-        if(parent[x] != x) {
-            return parent[x] = findSet(parent[x]);
-        }
-        return x;
-        
-    }
-    
-    static void union(int x, int y) {
-        if(y>x) {
-            parent[findSet(y)] = findSet(x);    
-        } else if(y<x) {
-            parent[findSet(x)] = findSet(y);
-        } else {
-            return;
-        }
-        
-        
-    }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        String yes = "YES\n";
-        String no = "NO\n";
         StringTokenizer st = new StringTokenizer(br.readLine());
-
-
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-
-        parent = new int[n+1];
-        for (int i = 1; i < n+1; i++) {
+        parent = new int[n + 1];
+        for (int i = 1; i < n + 1; i++) {
             parent[i] = i;
         }
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int cmd = Integer.parseInt(st.nextToken());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            switch (cmd) {
-                case 0:
-                    union(a,b);
-                    break;
-
-                case 1:
-                    if(findSet(a) == findSet(b)) {
-                        sb.append(yes);
-                    } else {
-                        sb.append(no);
-                    }
-                    break;
+            if (cmd == 0) {
+                union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+            } else {
+                int a = findSet(Integer.parseInt(st.nextToken()));
+                int b = findSet(Integer.parseInt(st.nextToken()));
+                if (a == b) {
+                    sb.append("YES\n");
+                } else {
+                    sb.append("NO\n");
+                }
             }
-
         }
-
         System.out.print(sb);
+        br.close();
+    }
 
-        
+    static int findSet(int a) {
+        if (parent[a] != a) {
+            return parent[a] = findSet(parent[a]);
+        }
+        return a;
+    }
+
+    static void union(int a, int b) {
+        int parentA = findSet(a);
+        int parentB = findSet(b);
+        if (parentA == parentB) {
+            return;
+        }
+        if (parentA < parentB) {
+            parent[parentB] = parentA;
+        } else {
+            parent[parentA] = parentB;
+        }
     }
 }
