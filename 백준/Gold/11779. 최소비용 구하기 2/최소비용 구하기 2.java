@@ -6,14 +6,13 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
         List<int[]>[] adjList = new ArrayList[n + 1];
         for (int i = 1; i < n + 1; i++) {
             adjList[i] = new ArrayList<>();
         }
+        StringTokenizer st;
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
@@ -24,39 +23,40 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         int start = Integer.parseInt(st.nextToken());
         int end = Integer.parseInt(st.nextToken());
-
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        boolean[] visited = new boolean[n + 1];
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
         int[] prev = new int[n + 1];
-        int cost = 0;
-        pq.add(new int[]{start, 0, -1});
-        while (true) {
+        int c = 0;
+        pq.add(new int[]{start, start, 0});
+
+
+        while (!pq.isEmpty()) {
             int[] now = pq.poll();
-            if (visited[now[0]]) {
+            int curr = now[0];
+            int pre = now[1];
+            int cost = now[2];
+            if (prev[curr] != 0) {
                 continue;
             }
-            prev[now[0]] = now[2];
-            if (now[0] == end) {
-                cost =now[1];
+            prev[curr] = pre;
+            if (curr == end) {
+                c = cost;
                 break;
             }
-            visited[now[0]] = true;
-
-            adjList[now[0]].forEach(e -> {
-                if (visited[e[0]]) {
+            adjList[curr].forEach(e -> {
+                if (prev[e[0]] != 0) {
                     return;
                 }
-                pq.add(new int[]{e[0], e[1] + now[1], now[0]});
+                pq.add(new int[]{e[0], curr, cost + e[1]});
             });
         }
-
         Stack<Integer> stack = new Stack<>();
-
-        while (end != -1) {
+        while (end != start) {
             stack.push(end);
             end = prev[end];
         }
-        sb.append(cost).append("\n");
+        stack.push(start);
+        StringBuilder sb = new StringBuilder();
+        sb.append(c).append("\n");
         sb.append(stack.size()).append("\n");
         while (!stack.isEmpty()) {
             sb.append(stack.pop()).append(" ");
