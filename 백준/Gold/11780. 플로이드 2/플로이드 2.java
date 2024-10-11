@@ -1,96 +1,76 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
+    static int INF = 1 << 28;
 
-		int INF = 1 << 29;
-
-		int N = Integer.parseInt(br.readLine());
-		int M = Integer.parseInt(br.readLine());
-		int[][] dist = new int[N + 1][N + 1];
-		int[][] route = new int[N + 1][N + 1];
-
-		for (int i = 0; i < dist.length; i++) {
-			for (int j = 0; j < dist.length; j++) {
-				dist[i][j] = INF;
-
-			}
-			dist[i][i] = 0;
-		}
-
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
-
-			if (dist[a][b] > c) {
-				dist[a][b] = c;
-
-				route[a][b] = a; // i 에서 j갈때 마지막으로 거친 곳
-
-			}
-
-		}
-
-		for (int m = 1; m < dist.length; m++) {
-			for (int s = 1; s < dist.length; s++) {
-				for (int e = 1; e < dist.length; e++) {
-					if (dist[s][e] > dist[s][m] + dist[m][e]) {
-						dist[s][e] = dist[s][m] + dist[m][e];
-						route[s][e] = route[m][e];
-
-					}
-				}
-
-			}
-
-		}
-		for (int i = 1; i < dist.length; i++) {
-			for (int j = 1; j < dist.length; j++) {
-				if (dist[i][j] == INF) {
-					dist[i][j] = 0;
-				}
-				sb.append(dist[i][j]).append(" ");
-
-			}
-			sb.append("\n");
-
-		}
-		Stack<Integer> stack = new Stack<>();
-		for (int i = 1; i < route.length; i++) {
-			for (int j = 1; j < route.length; j++) {
-				if (route[i][j] == 0) {
-					sb.append(0).append("\n");
-					continue;
-				} else {
-					stack.push(j);
-					int prev = route[i][j];
-					while (prev != 0) {
-						stack.push(prev);
-						prev = route[i][prev];
-					}
-					sb.append(stack.size()).append(" ");
-					while (!stack.isEmpty()) {
-						sb.append(stack.pop()).append(" ");
-					}
-					sb.append("\n");
-				}
-
-			}
-
-		}
-
-		System.out.print(sb);
-
-		br.close();
-	}
-
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
+        int[][] dist = new int[n + 1][n + 1];
+        int[][] route = new int[n + 1][n + 1];
+        for (int i = 1; i < n + 1; i++) {
+            Arrays.fill(dist[i], INF);
+            dist[i][i] = 0;
+        }
+        StringTokenizer st;
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            if (dist[a][b] > c) {
+                dist[a][b] = c;
+                route[a][b] = a;
+            }
+        }
+        for (int mid = 1; mid < n + 1; mid++) {
+            for (int s = 1; s < n + 1; s++) {
+                for (int e = 1; e < n + 1; e++) {
+                    if (dist[s][e] > dist[s][mid] + dist[mid][e]) {
+                        dist[s][e] = dist[s][mid] + dist[mid][e];
+                        route[s][e] = route[mid][e];
+                    }
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < n + 1; j++) {
+                if (dist[i][j] == INF) {
+                    dist[i][j] = 0;
+                }
+                sb.append(dist[i][j]).append(" ");
+            }
+            sb.append("\n");
+        }
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < n + 1; j++) {
+                if (dist[i][j] == 0) {
+                    sb.append(0);
+                } else {
+                    stack.add(j);
+                    int now = route[i][j];
+                    while (now != i) {
+                        stack.add(now);
+                        now = route[i][now];
+                    }
+                    stack.add(i);
+                    sb.append(stack.size()).append(" ");
+                    while (!stack.isEmpty()) {
+                        sb.append(stack.pop()).append(" ");
+                    }
+                }
+                sb.append("\n");
+            }
+        }
+        System.out.print(sb);
+        br.close();
+    }
 }
