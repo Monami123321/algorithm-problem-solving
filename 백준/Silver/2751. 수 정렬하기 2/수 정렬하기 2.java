@@ -11,7 +11,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = nextInt();
         }
-        heapSort(arr);
+        mergeSort(arr);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             sb.append(arr[i]).append("\n");
@@ -19,38 +19,40 @@ public class Main {
         System.out.print(sb);
     }
 
-    static void heapSort(int[] arr) {
-        int n = arr.length;
-        for (int i = (n >> 1) - 1; i >= 0; i--) {
-            heapify(arr, i, n);
-        }
-        for (int i = n - 1; i > 0; i--) {
-            swap(arr, 0, i);
-            heapify(arr, 0, i);
-        }
+    static void mergeSort(int[] arr) {
+        int[] tmp = new int[arr.length];
+        mergeSort(arr, tmp, 0, arr.length - 1);
     }
 
-    static void heapify(int[] arr, int node, int n) {
-        int largest = node;
-        int left = node << 1 | 1;
-        int right = (node << 1) + 2;
-        if (left < n && arr[left] > arr[largest]) {
-            largest = left;
+    static void mergeSort(int[] arr, int[] tmp, int left, int right) {
+        if (left == right) {
+            return;
         }
-        if (right < n && arr[right] > arr[largest]) {
-            largest = right;
-        }
-        if (node != largest) {
-            swap(arr, largest, node);
-            heapify(arr, largest, n);
-        }
+
+        int mid = left + right >> 1;
+        mergeSort(arr, tmp, left, mid);
+        mergeSort(arr, tmp, mid + 1, right);
+        merge(arr, tmp, left, mid, right);
     }
 
-
-    static void swap(int[] arr, int a, int b) {
-        int tmp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = tmp;
+    static void merge(int[] arr, int[] tmp, int left, int mid, int right) {
+        int idx = left;
+        int l = left;
+        int r = mid + 1;
+        while (l <= mid && r <= right) {
+            if (arr[l] < arr[r]) {
+                tmp[idx++] = arr[l++];
+            } else {
+                tmp[idx++] = arr[r++];
+            }
+        }
+        while (l <= mid) {
+            tmp[idx++] = arr[l++];
+        }
+        while (r <= right) {
+            tmp[idx++] = arr[r++];
+        }
+        System.arraycopy(tmp, left, arr, left, right - left + 1);
     }
 
     static int nextInt() {
@@ -68,9 +70,7 @@ public class Main {
             }
             res *= 10;
             res += tmp - 48;
-
         }
         return flag ? -res : res;
     }
-
 }
