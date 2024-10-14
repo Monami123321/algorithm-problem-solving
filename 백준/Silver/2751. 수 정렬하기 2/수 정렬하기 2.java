@@ -1,59 +1,76 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class Main {
+    static byte[] buffer = new byte[9000010];
+    static int index = 0;
 
-    static void mergeSort(int[] arr) {
-        int[] tmp = new int[arr.length];
-        sort(arr, tmp, 0, arr.length - 1);
-
-    }
-
-    private static void sort(int[] arr, int[] tmp, int start, int end) {
-        if (end > start) {
-            int mid = (start + end) / 2;
-            sort(arr, tmp, start, mid);
-            sort(arr, tmp, mid + 1, end);
-            merge(arr, tmp, start, mid, end);
-        }
-    }
-
-    private static void merge(int[] arr, int[] tmp, int start, int mid, int end) {
-        for (int i = start; i <= end; i++) {
-            tmp[i] = arr[i];
-        }
-        int left = start;
-        int right = mid + 1;
-        int index = start;
-        while (left <= mid && right <= end) {
-            if (tmp[left] <= tmp[right]) {
-                arr[index++] = tmp[left++];
-            } else {
-                arr[index++] = tmp[right++];
-            }
-        }
-        for (int i = 0; i <= mid - left; i++) {
-            arr[index + i] = tmp[left + i];
-        }
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        int n = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws IOException {
+        System.in.read(buffer);
+        int n = nextInt();
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+            arr[i] = nextInt();
         }
-        mergeSort(arr);
+        heapSort(arr);
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             sb.append(arr[i]).append("\n");
         }
         System.out.print(sb);
-        br.close();
     }
 
+    static void heapSort(int[] arr) {
+        int n = arr.length;
+        for (int i = (n >> 1) - 1; i >= 0; i--) {
+            heapify(arr, i, n);
+        }
+        for (int i = n - 1; i > 0; i--) {
+            swap(arr, 0, i);
+            heapify(arr, 0, i);
+        }
+    }
+
+    static void heapify(int[] arr, int node, int n) {
+        int largest = node;
+        int left = node << 1 | 1;
+        int right = (node << 1) + 2;
+        if (left < n && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right < n && arr[right] > arr[largest]) {
+            largest = right;
+        }
+        if (node != largest) {
+            swap(arr, largest, node);
+            heapify(arr, largest, n);
+        }
+    }
+
+
+    static void swap(int[] arr, int a, int b) {
+        int tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
+    }
+
+    static int nextInt() {
+        int res = buffer[index++];
+        boolean flag = res == '-';
+        if (flag) {
+            res = buffer[index++];
+        }
+        res -= 48;
+        int tmp;
+        while (true) {
+            tmp = buffer[index++];
+            if (tmp < '0' || tmp > '9') {
+                break;
+            }
+            res *= 10;
+            res += tmp - 48;
+
+        }
+        return flag ? -res : res;
+    }
 
 }
