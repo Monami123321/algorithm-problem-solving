@@ -1,0 +1,1 @@
+console.log(require('fs').readFileSync(0).toString().trim().split("\n").slice(1).filter(e => e.includes("S"))[0]);
