@@ -12,7 +12,7 @@ public class Main {
             n *= 10;
             n += buffer[i] - 48;
         }
-        int limit = n;
+        int limit = (int) Math.sqrt(n) + 2;
 
         List<Integer> list = new ArrayList<>();
         boolean[] visited = new boolean[limit + 1];
@@ -37,6 +37,10 @@ public class Main {
                 n /= p;
                 sb.append(p).append("\n");
             }
+            if (isPrime(n)) {
+                sb.append(n);
+                break;
+            }
         }
         System.out.print(sb);
     }
@@ -53,8 +57,8 @@ public class Main {
         }
         int limit = (int) Math.sqrt(n);
 
-        for (int i = 6; i <= limit; i += 5) {
-            if (n % (i - 1) == 0 || n % (i + 1) == 0) {
+        for (int i = 5; i <= limit; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
                 return false;
             }
         }
