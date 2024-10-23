@@ -17,7 +17,7 @@ public class Main {
                 arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 int[] tmp1 = arr[i];
                 int[] tmp2 = arr[j];
@@ -40,14 +40,17 @@ public class Main {
                 }
             }
 
+            outer:
             for (int i = 0; i < n; i++) {
+                int shelterDist = Integer.MAX_VALUE;
                 for (int j = 0; j < k; j++) {
                     if (selected[i] == 1) {
-                        continue;
+                        continue outer;
                     }
                     int shelter = tmp[j];
-                    caseAns = Math.max(dist[shelter][i], caseAns);
+                    shelterDist = Math.min(dist[shelter][i], shelterDist);
                 }
+                caseAns = Math.max(caseAns, shelterDist);
             }
             ans = Math.min(ans, caseAns);
         } while (nextPerm(selected));
