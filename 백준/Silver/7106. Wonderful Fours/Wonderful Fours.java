@@ -16,30 +16,26 @@ public class Main {
         }
         Arrays.sort(arr);
         Set<Integer> set = new HashSet<>();
-
         do {
-            int comb = getNum(arr);
-            if (comb != 0) {
-                set.add(comb);
+            int num = getNum(arr);
+            if (num != 0) {
+                set.add(num);
             }
         } while (nextPermutation(arr));
-
         arr = set.stream().mapToInt(Integer::intValue).sorted().toArray();
-        int cnt = 0;
         int len = arr.length;
+        int cnt = 0;
+
         for (int i = 0; i < len - 3; i++) {
             for (int j = i + 1; j < len - 2; j++) {
                 for (int k = j + 1; k < len - 1; k++) {
-                    for (int l = k + 1; l < len; l++) {
-                        if (arr[i] + arr[j] + arr[k] == arr[l]) {
-                            cnt++;
-                        }
+                    if (Arrays.binarySearch(arr, k + 1, len, arr[i] + arr[j] + arr[k]) < 0) {
+                        continue;
                     }
-
+                    cnt++;
                 }
             }
         }
-
         System.out.println(cnt);
         br.close();
     }
@@ -71,14 +67,16 @@ public class Main {
     }
 
     static int getNum(int[] arr) {
-        if (arr[0] == 0) {
+        int res = arr[0];
+        if (res == 0) {
             return 0;
         }
-        int res = arr[0];
-        for (int i = 1; i < arr.length; i++) {
+        for (int i = 1; i < 5; i++) {
             res *= 10;
             res += arr[i];
         }
         return res;
     }
+
+
 }
