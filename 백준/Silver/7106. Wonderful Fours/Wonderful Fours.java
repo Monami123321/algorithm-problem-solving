@@ -25,32 +25,21 @@ public class Main {
         } while (nextPermutation(arr));
 
         arr = set.stream().mapToInt(Integer::intValue).sorted().toArray();
-        int[] selected = new int[arr.length];
-        for (int i = 0; i < 4; i++) {
-            selected[selected.length - 1 - i] = 1;
-        }
         int cnt = 0;
-
-        do {
-            int index = 0;
-            int now = 0;
-            int sum = 0;
-            int d = 0;
-            while (now < 4 && index < selected.length) {
-                if (selected[index] != 0) {
-                    if (now != 3) {
-                        sum += arr[index];
-                    } else {
-                        d = arr[index];
+        int len = arr.length;
+        for (int i = 0; i < len - 3; i++) {
+            for (int j = i + 1; j < len - 2; j++) {
+                for (int k = j + 1; k < len - 1; k++) {
+                    for (int l = k + 1; l < len; l++) {
+                        if (arr[i] + arr[j] + arr[k] == arr[l]) {
+                            cnt++;
+                        }
                     }
-                    now++;
+
                 }
-                index++;
             }
-            if (sum == d) {
-                cnt++;
-            }
-        } while (nextPermutation(selected));
+        }
+
         System.out.println(cnt);
         br.close();
     }
