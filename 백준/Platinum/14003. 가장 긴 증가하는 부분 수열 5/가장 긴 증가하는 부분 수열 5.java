@@ -1,8 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Stack;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -17,33 +18,30 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
             tmp[i] = Integer.MAX_VALUE;
         }
-        int maxIndex = 0;
+        int lisIdx = 0;
         for (int i = 0; i < n; i++) {
             int index = Arrays.binarySearch(tmp, arr[i]);
             if (index < 0) {
-                index = -(index + 1);
+                index = -index - 1;
             }
             tmp[index] = arr[i];
-            maxIndex = Math.max(maxIndex, index);
             lis[i] = index;
+            lisIdx = Math.max(lisIdx, index);
         }
-        Stack<Integer> stack = new Stack<>();
-        int index = n - 1;
-        while (maxIndex >= 0) {
-            if (lis[index] == maxIndex) {
-                stack.push(arr[index]);
-                --maxIndex;
-            }
-            --index;
-        }
+
         StringBuilder sb = new StringBuilder();
-        sb.append(stack.size()).append("\n");
+        sb.append(lisIdx + 1).append("\n");
+        Deque<Integer> stack = new ArrayDeque<>(1 << 20);
+        for (int i = n - 1; i >= 0; i--) {
+            if (lis[i] == lisIdx) {
+                stack.push(arr[i]);
+                lisIdx--;
+            }
+        }
         while (!stack.isEmpty()) {
             sb.append(stack.pop()).append(" ");
         }
         System.out.print(sb);
-
-
         br.close();
     }
 }
