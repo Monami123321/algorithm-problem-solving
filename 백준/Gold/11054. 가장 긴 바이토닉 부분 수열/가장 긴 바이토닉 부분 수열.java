@@ -1,39 +1,40 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         int[] arr = new int[n];
-        int[] dp1 = new int[n];
+        int[][] lis = new int[2][n];
+        int[][] dp = new int[2][n];
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            dp1[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (arr[i] > arr[j]) {
-                    dp1[i] = Math.max(dp1[j] + 1, dp1[i]);
-                }
-            }
+            lis[1][i] = lis[0][i] = Integer.MAX_VALUE;
         }
-        int[] dp2 = new int[n];
-        for (int i = n-1; i >= 0; i--) {
-            dp2[i] = 1;
-            for (int j = n-1; j > i; j--) {
-                if (arr[i] > arr[j]) {
-                    dp2[i] = Math.max(dp2[i], dp2[j] + 1);
-                }
+        for (int i = 0; i < n; i++) {
+            int index = Arrays.binarySearch(lis[0], arr[i]);
+            if (index < 0) {
+                index = -index - 1;
             }
+            lis[0][index] = arr[i];
+            dp[0][i] = index;
+            index = Arrays.binarySearch(lis[1], arr[n - 1 - i]);
+            if (index < 0) {
+                index = -index - 1;
+            }
+            lis[1][index] = arr[n - 1 - i];
+            dp[1][n - 1 - i] = index;
         }
         int ans = 0;
         for (int i = 0; i < n; i++) {
-            ans = Math.max(ans, dp1[i] + dp2[i]);
+            ans = Math.max(ans, dp[0][i] + dp[1][i]);
         }
-        System.out.println(ans-1);
+        System.out.println(ans + 1);
         br.close();
     }
 }
