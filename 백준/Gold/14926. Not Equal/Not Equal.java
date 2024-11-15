@@ -19,7 +19,7 @@ public class Main {
                 }
                 visited[now][i] = visited[i][now] = true;
                 now = i;
-                sb.append(String.format("a%d ", now + 1));
+                sb.append("a").append(now + 1).append(" ");
                 cnt++;
                 break;
             }
