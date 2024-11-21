@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -10,23 +9,30 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st;
         StringBuilder sb = new StringBuilder();
-        Map<Long, Integer> hm = new HashMap<>();
-
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int tmp = Integer.parseInt(st.nextToken());
-
+            long[] arr = new long[tmp];
+            long major = 0;
+            int cnt = 0;
             for (int j = 0; j < tmp; j++) {
-                hm.merge(Long.parseLong(st.nextToken()), 1, Integer::sum);
+                arr[j] = Long.parseLong(st.nextToken());
+                if (cnt == 0) {
+                    major = arr[j];
+                }
+                cnt += arr[j] == major ? 1 : -1;
             }
-            List<Map.Entry<Long, Integer>> list = hm.entrySet().stream().sorted(Comparator.comparingInt(a -> -a.getValue())).collect(Collectors.toList());
-            Map.Entry<Long, Integer> entry = list.get(0);
-            if (entry.getValue() > (tmp >> 1)) {
-                sb.append(entry.getKey()).append("\n");
+            cnt = 0;
+            for (int j = 0; j < tmp; j++) {
+                if (arr[j] == major) {
+                    cnt++;
+                }
+            }
+            if (cnt > (tmp >> 1)) {
+                sb.append(major).append("\n");
             } else {
                 sb.append("SYJKGW\n");
             }
-            hm.clear();
         }
         System.out.print(sb);
         br.close();
