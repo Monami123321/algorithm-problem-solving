@@ -1,16 +1,7 @@
 import sys
-input = sys.stdin.readline
-tc = int(input())
+tc, *arr = sys.stdin.read().rstrip().split("\n")
 ans = []
-while tc:
-    tc -= 1
-    arr = list(input().rstrip())
-    ref = list(input().rstrip())
-    for i in range(len(arr)):
-        if arr[i] == " ":
-            continue
-        arr[i] = ref[ord(arr[i]) - 65]
-    ans.append("".join(arr))        
-sys.stdout.write("\n".join(ans))        
-                            
-    
+tc = int(tc)
+for i in range(0, tc << 1, 2):
+    ans.append(arr[i].translate(str.maketrans("ABCDEFGHIJKLMNOPQRSTUVWXYZ", arr[i + 1].rstrip())))
+sys.stdout.write("\n".join(ans))    
