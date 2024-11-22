@@ -1,0 +1,2 @@
+const arr = require('fs').readFileSync(0).toString().trim().split(" ").map(Number).sort((a, b) => +b - +a);
+console.log(arr[0] < arr[1] + arr[2] ? arr[0] + arr[1] + arr[2] : (arr[1] + arr[2] << 1) - 1)
