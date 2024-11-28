@@ -1,39 +1,36 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	static void permutation(int depth, int n, int m, int r, int[] res, int index, boolean[] visited) {
-		if (r == m) {
-			for (int i = 0; i < m; i++) {
-				System.out.print(res[i]+" ");
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        StringBuilder sb = new StringBuilder();
+        perm(n, m, 0, new int[m], new boolean[n + 1], sb);
+        System.out.print(sb);
+        br.close();
+    }
 
-			}
-			System.out.println();
-			return;
-
-		}
-
-		if (depth == n) {
-			return;
-		}
-		for (int i = 0; i < n; i++) {
-			if(visited[i]) continue;
-			visited[i] = true;
-			res[index] = i+1;
-			permutation(depth + 1, n, m, r + 1, res, index+1, visited);
-			visited[i] = false;
-		}
-
-	}
-
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-
-		int n = scanner.nextInt();
-		int m = scanner.nextInt();
-
-		permutation(0, n, m, 0, new int[n],0,new boolean[n]);
-
-		scanner.close();
-	}
-
+    static void perm(int n, int m, int depth, int[] res, boolean[] visited, StringBuilder sb) {
+        if (depth == m) {
+            for (int c : res) {
+                sb.append(c).append(" ");
+            }
+            sb.append("\n");
+            return;
+        }
+        for (int i = 1; i <= n; i++) {
+            if (visited[i]) {
+                continue;
+            }
+            res[depth] = i;
+            visited[i] = true;
+            perm(n, m, depth + 1, res, visited, sb);
+            visited[i] = false;
+        }
+    }
 }
