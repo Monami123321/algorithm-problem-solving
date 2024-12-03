@@ -26,6 +26,9 @@ public class Main {
         q.add(new int[]{0, 0, 0});
         visited[0][0] = 0;
         while (!q.isEmpty()) {
+            if (visited[n - 1][n - 1] != -1) {
+                break;
+            }
             List<int[]> list = new ArrayList<>();
             while (!q.isEmpty()) {
                 int[] now = q.poll();
