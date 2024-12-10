@@ -1,5 +1,5 @@
-from decimal import Decimal, getcontext
-getcontext().prec = 300
-n = 1 << int(input())
-a = Decimal("1")
-print(format(a/n,'f'))
+import sys
+n = int(sys.stdin.read())
+val = 5 ** n
+l = len(str(val))
+sys.stdout.write(f"0.{'0' * (n - l)}{val}")
