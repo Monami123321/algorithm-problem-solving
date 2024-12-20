@@ -5,36 +5,53 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        long limit = Long.parseLong(br.readLine());
+        String str = br.readLine();
+        int len = str.length();
+        int[] arr = new int[len + 1];
+        arr[1] = 9;
+        for (int i = 2; i < len; i++) {
+            if ((i & 1) == 0) {
+                arr[i] = arr[i - 1];
+            } else {
+                arr[i] = arr[i - 1] * 10;
+            }
+        }
+        int cnt = 0;
+        for (int i = 1; i < len; i++) {
+            cnt += arr[i];
+        }
+
+        int n = (int) Math.pow(10, (len >> 1) - 1);
+        long limit = Long.parseLong(str);
         if (limit < 10) {
             System.out.println(limit);
             return;
         }
-
-        int n = 1;
-        int cnt = 9;
-        while (true) {
-            StringBuilder sb = new StringBuilder();
-            long tmp = Long.parseLong(sb.append(n).append(new StringBuilder().append(n).reverse()).toString());
-            if (tmp > limit) {
-                break;
-            }
-            cnt++;
-            n++;
-        }
-        n = 1;
-        outer:
-        while (true) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(n);
-            for (int i = 0; i < 10; i++) {
-                long tmp = Long.parseLong(new StringBuilder(sb).append(i).append(new StringBuilder(sb).reverse()).toString());
+        if ((len & 1) == 0) {
+            while (true) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(n);
+                long tmp = Long.parseLong(sb.append(new StringBuilder(sb).reverse()).toString());
                 if (tmp > limit) {
-                    break outer;
+                    break;
                 }
                 cnt++;
+                n++;
             }
-            n++;
+        } else {
+            outer:
+            while (true) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(n);
+                for (int i = 0; i < 10; i++) {
+                    long tmp = Long.parseLong(new StringBuilder(sb).append(i).append(new StringBuilder(sb).reverse()).toString());
+                    if (tmp > limit) {
+                        break outer;
+                    }
+                    cnt++;
+                }
+                n++;
+            }
         }
         System.out.println(cnt);
         br.close();
