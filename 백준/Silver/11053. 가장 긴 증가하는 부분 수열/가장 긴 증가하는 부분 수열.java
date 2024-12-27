@@ -9,53 +9,19 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[n];
-        int max = 0;
+        int[] dp = new int[n];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        int size = 0;
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-            max = Math.max(arr[i], max);
+            int now = Integer.parseInt(st.nextToken());
+            int index = Arrays.binarySearch(dp, now);
+            if (index < 0) {
+                index = -index - 1;
+            }
+            size = Math.max(index + 1, size);
+            dp[index] = now;
         }
-        int startIndex = 1;
-        while (startIndex < max) {
-            startIndex <<= 1;
-        }
-        int treeSize = startIndex << 1;
-        int[] segTree = new int[treeSize];
-        for (int i = 0; i < n; i++) {
-            int prev = query(segTree, startIndex, startIndex + arr[i] - 2);
-            update(segTree, startIndex + arr[i] - 1, prev + 1);
-        }
-        System.out.println(segTree[1]);
+        System.out.println(size);
         br.close();
     }
-
-    static int query(int[] segTree, int left, int right) {
-        int res = 0;
-        while (right > left) {
-            if ((left & 1) == 0) {
-                left >>= 1;
-            } else {
-                res = Math.max(res, segTree[left++]);
-                left >>= 1;
-            }
-            if ((right & 1) == 0) {
-                res = Math.max(res, segTree[right--]);
-                right >>= 1;
-            } else {
-                right >>= 1;
-            }
-        }
-        if (left == right) {
-            res = Math.max(segTree[left], res);
-        }
-        return res;
-    }
-
-    static void update(int[] segTree, int index, int val) {
-        while (index > 0) {
-            segTree[index] = Math.max(segTree[index], val);
-            index >>= 1;
-        }
-    }
-
 }
