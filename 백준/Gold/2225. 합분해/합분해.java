@@ -19,20 +19,12 @@ public class Main {
 
     static int getVal(int n, int k) {
         if (k == 1 || n == 0) {
-
             return 1;
         }
         if (dp[n][k] != 0) {
             return dp[n][k];
         }
-        int sum = 0;
-        for (int i = 0; i <= n; i++) {
-            sum += getVal(i, k - 1);
-            sum %= MOD;
-        }
-        return dp[n][k] = sum;
+        return dp[n][k] = (getVal(n, k - 1) + getVal(n - 1, k)) % MOD;
     }
-
-
 }
 
