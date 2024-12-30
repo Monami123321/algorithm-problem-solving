@@ -8,16 +8,15 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] arr = new int[n];
-        int[] dp = new int[n];
-        int ans = arr[0] = dp[0] = Integer.parseInt(st.nextToken());
-
+        int val = Integer.parseInt(st.nextToken());
+        int globalMax = val;
+        int localMax = val;
         for (int i = 1; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-            dp[i] = Math.max(dp[i - 1] + arr[i], arr[i]);
-            ans = Math.max(ans, dp[i]);
+            val = Integer.parseInt(st.nextToken());
+            localMax = Math.max(localMax + val, val);
+            globalMax = Math.max(globalMax, localMax);
         }
-        System.out.println(ans);
+        System.out.println(globalMax);
         br.close();
     }
 }
