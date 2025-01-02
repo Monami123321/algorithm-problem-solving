@@ -1,6 +1,8 @@
 import sys
 ans = []
-for i, line in enumerate(sys.stdin.read().rstrip().split("\n")[:-1], 1):
+list = list(sys.stdin.read().rstrip().split("\n"))
+list.pop()
+for i, line in enumerate(list, 1):
     if eval(line):
         ans.append(f"Case {i}: true")
     else:
