@@ -51,19 +51,15 @@ public class Main {
             int d = now[2];
             int t = now[3];
 
-            outer:
+
             for (int i = 1; i <= 3; i++) {
                 int nr = r + dr[d] * i;
                 int nc = c + dc[d] * i;
                 if (nr < 0 || nr > n - 1 || nc < 0 || nc > m - 1 || visited[nr][nc][d] <= t + 1) {
                     continue;
                 }
-                for (int j = 1; j <= i; j++) {
-                    int nnr = r + dr[d] * j;
-                    int nnc = c + dc[d] * j;
-                    if (map[nnr][nnc] == 1) {
-                        continue outer;
-                    }
+                if (map[nr][nc] == 1) {
+                    break;
                 }
 
                 q.add(new int[]{nr, nc, d, t + 1});
