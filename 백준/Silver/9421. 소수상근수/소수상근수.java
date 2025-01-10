@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -55,7 +53,7 @@ public class Main {
     }
 
     static boolean isValid(int n) {
-        Set<Integer> set = new HashSet<>();
+        boolean[] visited = new boolean[488];
         while (true) {
             int tmp = n % 10;
             int val = tmp * tmp;
@@ -67,10 +65,10 @@ public class Main {
             if (val == 1) {
                 return true;
             }
-            if (set.contains(val)) {
+            if (visited[val]) {
                 return false;
             }
-            set.add(val);
+            visited[val] = true;
             n = val;
         }
     }
