@@ -1,63 +1,54 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 
 public class Main {
+    static byte[] buffer = new byte[900000];
+    static int index = 0;
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        System.in.read(buffer);
+        int n = nextInt();
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            arr[i] = nextInt();
         }
-        quickSort(arr);
+        arr = countingSort(arr);
         int ans = 0;
-
         for (int i = 0; i < n; i++) {
-            ans = Math.max(ans, i + 2 + arr[i]);
+            ans = Math.max(ans, arr[i] + i + 2);
         }
         System.out.println(ans);
-
-
-        br.close();
     }
 
-    static void quickSort(int[] arr) {
-        quickSort(arr, 0, arr.length - 1);
-    }
-
-    static void quickSort(int[] arr, int start, int end) {
-        int pivot = partition(arr, start, end);
-        if (start < pivot - 1) {
-            quickSort(arr, start, pivot - 1);
-        }
-        if (pivot < end) {
-            quickSort(arr, pivot, end);
-        }
-    }
-
-    static int partition(int[] arr, int start, int end) {
-        int val = arr[start + end >> 1];
-        while (start <= end) {
-            while (arr[start] > val) {
-                start++;
+    static int nextInt() {
+        int res = buffer[index++] - 48;
+        int tmp;
+        while (true) {
+            tmp = buffer[index++];
+            if (!Character.isDigit(tmp)) {
+                break;
             }
-            while (arr[end] < val) {
-                end--;
-            }
-            if (start <= end) {
-                swap(arr, start++, end--);
-            }
+            res *= 10;
+            res += tmp - 48;
         }
-        return start;
+        return res;
     }
 
-    static void swap(int[] arr, int a, int b) {
-        int tmp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = tmp;
+    static int[] countingSort(int[] arr) {
+        int max = 0;
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+        }
+        int[] cnt = new int[max + 1];
+        for (int i = 0; i < arr.length; i++) {
+            cnt[arr[i]]++;
+        }
+        for (int i = max - 1; i >= 0; i--) {
+            cnt[i] += cnt[i + 1];
+        }
+        int[] sorted = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            sorted[--cnt[arr[i]]] = arr[i];
+        }
+        return sorted;
     }
 }
-
