@@ -1,5 +1,7 @@
 import sys
 
-n = (1 << int(sys.stdin.read())) - 1
-sys.stdout.write(format(n * (n + 1) >> 1, 'b'))
+n = int(sys.stdin.read())
+sys.stdout.write("1" * n + "0" * (n - 1))
+
+
 
