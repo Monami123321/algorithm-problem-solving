@@ -4,11 +4,13 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int[] cnt;
+    static List<Integer>[] adjList;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        List<Integer>[] adjList = new ArrayList[n];
-        int[] cnt = new int[n];
+        adjList = new ArrayList[n];
+        cnt = new int[n];
         for (int i = 0; i < n; i++) {
             adjList[i] = new ArrayList<>();
         }
