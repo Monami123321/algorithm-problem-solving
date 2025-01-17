@@ -4,14 +4,11 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    static List<Integer>[] adjList;
-    static int[] cnt;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        adjList = new ArrayList[n];
-        cnt = new int[n];
+        List<Integer>[] adjList = new ArrayList[n];
+        int[] cnt = new int[n];
         for (int i = 0; i < n; i++) {
             adjList[i] = new ArrayList<>();
         }
@@ -30,16 +27,16 @@ public class Main {
             int[] now = q.poll();
             int node = now[0];
             int c = now[1];
-            adjList[node].forEach(e -> {
-                if (cnt[e] == 0) {
-                    cnt[e] = c + 1;
-                    q.add(new int[]{e, c + 1});
+            for (int i : adjList[node]) {
+                if (cnt[i] == 0) {
+                    cnt[i] = c + 1;
+                    q.add(new int[]{i, c + 1});
                 }
-            });
+            }
         }
         StringBuilder sb = new StringBuilder();
         for (int i = n - 1; i >= 1; i--) {
-            if ((n-1 - cnt[i] & 1) == 0) {
+            if ((n - 1 - cnt[i] & 1) == 0) {
                 sb.append(0);
             } else {
                 sb.append(1);
