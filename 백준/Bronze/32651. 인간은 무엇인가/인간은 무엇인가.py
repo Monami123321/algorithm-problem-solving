@@ -1,0 +1,1 @@
+print("Yes" if (tmp := int(input())) % 2024 == 0 and tmp <= 100000 else "No")
