@@ -4,33 +4,33 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static final int MOD = 1000000007;
     static long[] dp;
+    static final int MOD = 1000000007;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+        int r = Integer.parseInt(st.nextToken());
         dp = new long[n + 1];
         dp[0] = dp[1] = 1;
         for (int i = 2; i <= n; i++) {
-            dp[i] = dp[i - 1] * i % MOD;
+            dp[i] = (dp[i - 1] * i) % MOD;
         }
-        System.out.println(dp[n] * recurr(dp[n - k], MOD - 2) % MOD * recurr(dp[k], MOD - 2) % MOD);
+        System.out.println(dp[n] * recur(dp[n - r], MOD - 2) % MOD * recur(dp[r], MOD - 2) % MOD);
         br.close();
     }
 
-    static long recurr(long base, int exp) {
+    static long recur(long base, int exp) {
         if (exp == 1) {
             return base;
         }
-        long half = recurr(base, exp >> 1);
-        long res = half * half % MOD;
+        long half = recur(base, exp >> 1);
+        long res = half * half;
         if ((exp & 1) != 0) {
-            res *= base;
             res %= MOD;
+            res *= base;
         }
-        return res;
+        return res % MOD;
     }
 }
