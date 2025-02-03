@@ -50,9 +50,6 @@ public class Main {
     }
 
     static boolean isValid(long[][] visited, int a, int b, int c, int d) {
-        if (visited[a][b] == 0 || visited[c][d] == 0) {
-            return true;
-        }
         long l = visited[a][b];
         long r = visited[c][d];
         long check = l | r;
