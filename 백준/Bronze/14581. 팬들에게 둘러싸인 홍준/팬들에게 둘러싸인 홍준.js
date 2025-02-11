@@ -1,0 +1,1 @@
+console.log(`${":fan:".repeat(3)}\n:fan:${":" + require('fs').readFileSync(0).toString().trim() + ":"}:fan:\n${":fan:".repeat(3)}`);
