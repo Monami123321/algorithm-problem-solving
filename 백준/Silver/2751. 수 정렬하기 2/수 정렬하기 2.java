@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 public class Main {
-    static byte[] buffer = new byte[9000010];
+    static byte[] buffer = new byte[9000009];
     static int index = 0;
 
     public static void main(String[] args) throws IOException {
@@ -11,7 +11,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             arr[i] = nextInt();
         }
-        mergeSort(arr);
+        countingSort(arr);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             sb.append(arr[i]).append("\n");
@@ -19,41 +19,27 @@ public class Main {
         System.out.print(sb);
     }
 
-    static void mergeSort(int[] arr) {
-        int[] tmp = new int[arr.length];
-        mergeSort(arr, tmp, 0, arr.length - 1);
-    }
-
-    static void mergeSort(int[] arr, int[] tmp, int left, int right) {
-        if (left == right) {
-            return;
+    static void countingSort(int[] arr) {
+        int max = arr[0];
+        int n = arr.length;
+        for (int i = 1; i < n; i++) {
+            max = Math.max(arr[i], max);
+        }
+        int[] cnt = new int[max + 1000001];
+        for (int i = 0; i < n; i++) {
+            cnt[arr[i] + 1000000]++;
+        }
+        for (int i = 1; i < cnt.length; i++) {
+            cnt[i] += cnt[i - 1];
         }
 
-        int mid = left + right >> 1;
-        mergeSort(arr, tmp, left, mid);
-        mergeSort(arr, tmp, mid + 1, right);
-        merge(arr, tmp, left, mid, right);
+        int[] sorted = new int[n];
+        for (int i = n - 1; i >= 0; i--) {
+            sorted[--cnt[arr[i] + 1000000]] = arr[i];
+        }
+        System.arraycopy(sorted, 0, arr, 0, n);
     }
 
-    static void merge(int[] arr, int[] tmp, int left, int mid, int right) {
-        int idx = left;
-        int l = left;
-        int r = mid + 1;
-        while (l <= mid && r <= right) {
-            if (arr[l] < arr[r]) {
-                tmp[idx++] = arr[l++];
-            } else {
-                tmp[idx++] = arr[r++];
-            }
-        }
-        while (l <= mid) {
-            tmp[idx++] = arr[l++];
-        }
-        while (r <= right) {
-            tmp[idx++] = arr[r++];
-        }
-        System.arraycopy(tmp, left, arr, left, right - left + 1);
-    }
 
     static int nextInt() {
         int res = buffer[index++];
@@ -65,7 +51,7 @@ public class Main {
         int tmp;
         while (true) {
             tmp = buffer[index++];
-            if (tmp < '0' || tmp > '9') {
+            if (tmp < 48 || tmp > 57) {
                 break;
             }
             res *= 10;
@@ -74,3 +60,4 @@ public class Main {
         return flag ? -res : res;
     }
 }
+
