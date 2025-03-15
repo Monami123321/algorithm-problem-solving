@@ -1,0 +1,1 @@
++require('fs').readFileSync(0) === 0 ? console.log("YONSEI") : console.log("Leading the Way to the Future");
