@@ -5,30 +5,18 @@ import java.util.StringTokenizer;
 
 public class Main {
     static StringBuilder sb = new StringBuilder();
-    static int n, m;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        int[] arr = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            arr[i] = i + 1;
-        }
-        permutation(arr, new int[m], 0, 0);
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        perm(n, m, new int[m], 0, 1);
         System.out.print(sb);
         br.close();
     }
 
-    static void permutation(int[] arr, int[] res, int depth, int pick) {
-        if (pick == m) {
-            for (int i = 1; i < m; i++) {
-                if (res[i] < res[i - 1]) {
-                    return;
-                }
-            }
+    static void perm(int n, int m, int[] res, int depth,int prev) {
+        if (m == depth) {
             for (int i = 0; i < m; i++) {
                 sb.append(res[i]).append(" ");
             }
@@ -36,13 +24,9 @@ public class Main {
             return;
         }
 
-        if (depth == n) {
-            return;
-        }
-
-        for (int i = 1; i <= n; i++) {
+        for (int i = prev; i <= n; i++) {
             res[depth] = i;
-            permutation(arr, res, depth + 1, pick + 1);
+            perm(n, m, res, depth + 1, i);
         }
     }
 }
