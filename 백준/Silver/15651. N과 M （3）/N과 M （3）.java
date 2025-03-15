@@ -4,38 +4,31 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n, m;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = i + 1;
-        }
-        permutation(arr, new int[m], sb, 0, 0);
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        perm(n, m, 0, new int[m]);
         System.out.print(sb);
         br.close();
     }
 
-    static void permutation(int[] arr, int[] res, StringBuilder sb, int depth, int pick) {
-        if (pick == m) {
+    static void perm(int n, int m, int depth, int[] res) {
+        if (m == depth) {
             for (int i = 0; i < m; i++) {
                 sb.append(res[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
-        if (depth == n) {
-            return;
+        for (int i = 1; i <= n; i++) {
+            res[depth] = i;
+            perm(n, m, depth + 1, res);
         }
-        for (int i = 0; i < arr.length; i++) {
-            res[pick] = arr[i];
-            permutation(arr, res, sb, depth + 1, pick + 1);
-        }
-
     }
 }
+
+
