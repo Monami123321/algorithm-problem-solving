@@ -1,14 +1,18 @@
 import sys
 
-n, e, *lst, v1, v2 = map(int, sys.stdin.read().rstrip().split())
+# n, e, *lst, v1, v2 = map(int, sys.stdin.read().rstrip().split())
+n, e = map(int, sys.stdin.readline().split())
 INF = 1 << 29
 dist = [[INF for __ in range(n + 1)] for _ in range(n + 1)]
 for i in range(n + 1):
     dist[i][i] = 0
-
-for i in range(0, e * 3, 3):
-    a, b, c = lst[i], lst[i + 1], lst[i + 2]
+for i in range(e):
+    a, b, c = map(int, sys.stdin.readline().split())
     dist[a][b] = dist[b][a] = c
+v1, v2 = map(int, sys.stdin.readline().split())
+# for i in range(0, e * 3, 3):
+#     a, b, c = lst[i], lst[i + 1], lst[i + 2]
+#     dist[a][b] = dist[b][a] = c
 
 for i in range(n + 1):
     for j in range(n + 1):
